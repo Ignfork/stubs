@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="en">
+<title>Stubs</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Stubs: launch a pump.fun coin and send its creator fees to anyone's Venmo or Cash App, paid in dollars.">
+<meta name="theme-color" content="#FFF6EA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Outfit:wght@400;500;600;700;800&family=Bebas+Neue&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 8h26v5a3 3 0 0 0 0 6v5H3v-5a3 3 0 0 0 0-6z' fill='%23FF3D7F'/%3E%3Cpath d='M21 9v14' stroke='%23FFF6EA' stroke-width='2' stroke-dasharray='2 2'/%3E%3C/svg%3E">
+<style>
+/* Layout: a modern box office — light "paper" bands alternate with a midnight plum band; the hero is a working ticket printer; every object of value is a detailed ticket (foil strip, barcode, serial, perforation) while UI chrome stays quiet and soft */
+:root{
+  --paper:#FFF6EA; --paper2:#FCEBD5; --card:#FFFFFF; --ink:#1A1433; --ink2:#41385E; --muted:#776E92; --line:rgba(26,20,51,.12);
+  --night:#1B1435; --night2:#251C47;
+  --pink:#FF3D7F; --orange:#FF7A2E; --sun:#FFC93C; --teal:#10BFAE; --grape:#6E55FF; --sky:#3A9BFF; --lime:#9BDB3C;
+  --venmo:#3D95CE; --cash:#00C244;
+  --foil:linear-gradient(115deg,#FFB3D1,#FFE3A1 20%,#B9F3E9 40%,#C9B8FF 60%,#FFB3D1 80%,#FFE3A1);
+  --sh-s:0 1px 0 rgba(26,20,51,.06),0 6px 16px -8px rgba(26,20,51,.25);
+  --sh:0 1px 0 rgba(26,20,51,.06),0 18px 40px -18px rgba(26,20,51,.45);
+  --sh-l:0 2px 0 rgba(26,20,51,.05),0 40px 80px -30px rgba(26,20,51,.55);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Outfit","Segoe UI",system-ui,sans-serif;
+  --tick:"Bebas Neue","Impact","Arial Narrow",sans-serif;
+  --mono:"Courier Prime","Courier New",ui-monospace,monospace;
+  --r:22px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:90;background:var(--paper)}
+main{overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--grape);outline-offset:3px;border-radius:6px}
+::selection{background:var(--sun)}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.02;letter-spacing:-.035em;text-wrap:balance;font-weight:800}
+.mono{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.grad{background:linear-gradient(95deg,var(--pink) 0%,var(--orange) 35%,var(--sun) 60%,var(--teal) 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.under{position:relative;white-space:nowrap}
+.under svg{position:absolute;left:-2%;bottom:-.12em;width:104%;height:.32em}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--tick);font-size:18px;letter-spacing:.14em;color:var(--pink);margin-bottom:14px}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+.ico{width:20px;height:20px;flex:none}
+
+/* buttons */
+.btn{color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;border:0;background:var(--card);font-weight:700;font-size:15.5px;box-shadow:var(--sh-s),inset 0 0 0 1.5px var(--line);transition:transform .15s,box-shadow .15s,background .15s;white-space:nowrap;position:relative}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--sh),inset 0 0 0 1.5px var(--line)}
+.btn:active{transform:translateY(0)}
+.btn.pri{background:linear-gradient(180deg,#FF5A93,var(--pink));color:#fff;box-shadow:0 10px 24px -10px rgba(255,61,127,.8),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.dark{background:var(--ink);color:#fff;box-shadow:0 10px 24px -12px rgba(26,20,51,.8)}
+.btn.teal{background:linear-gradient(180deg,#22D3C1,var(--teal));color:#fff;box-shadow:0 10px 24px -10px rgba(16,191,174,.8),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn.sun{background:linear-gradient(180deg,#FFD866,var(--sun));box-shadow:0 10px 24px -12px rgba(255,201,60,.9),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn.ghost{background:transparent;box-shadow:none}
+.btn.ghost:hover{background:rgba(26,20,51,.05);box-shadow:none}
+.btn.sm{height:42px;padding:0 18px;font-size:14px}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:600;font-size:13px;white-space:nowrap}
+.chip.dark{background:var(--ink);color:#fff;box-shadow:none}
+.live{width:8px;height:8px;border-radius:50%;background:var(--cash);box-shadow:0 0 0 0 rgba(0,194,68,.6);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 9px rgba(0,194,68,0)}100%{box-shadow:0 0 0 0 rgba(0,194,68,0)}}
+
+/* card */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh),inset 0 0 0 1.5px var(--line);position:relative;min-width:0}
+.pad{padding:26px}
+.chead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.chead b{font-family:var(--tick);font-size:19px;letter-spacing:.12em;color:var(--ink2);font-weight:400}
+
+/* ===== TICKET ===== */
+.tkt{--tc:var(--pink);position:relative;display:grid;grid-template-columns:1fr 92px;border-radius:18px;background:#FFFDF8;color:var(--ink);filter:drop-shadow(0 18px 24px rgba(26,20,51,.22)) drop-shadow(0 2px 2px rgba(26,20,51,.12));min-width:0}
+.tkt::before,.tkt::after{content:"";position:absolute;right:80px;width:24px;height:24px;border-radius:50%;background:var(--hole,var(--paper));z-index:3}
+.tkt::before{top:-12px}.tkt::after{bottom:-12px}
+.tkt .body{position:relative;overflow:hidden;border-radius:18px 0 0 18px;padding:0 0 14px;min-width:0}
+.tkt .band{height:58px;background:var(--tc);position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 18px;color:#fff;overflow:hidden}
+.tkt .band::after{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 110% 50%,rgba(255,255,255,.0) 0 6px,rgba(255,255,255,.16) 6px 7px);pointer-events:none}
+.tkt .band .t{font-family:var(--tick);font-size:20px;letter-spacing:.12em;position:relative;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkt .band .n{font-family:var(--mono);font-size:12px;opacity:.9;position:relative;z-index:1;white-space:nowrap}
+.tkt .foil{position:absolute;left:0;right:0;top:58px;height:6px;background:var(--foil);background-size:300% 100%;animation:foil 5s linear infinite}
+@keyframes foil{to{background-position:-300% 0}}
+.tkt .gu{position:absolute;inset:64px 0 0 0;opacity:.5;pointer-events:none;background:repeating-linear-gradient(135deg,transparent 0 11px,rgba(26,20,51,.035) 11px 12px),repeating-linear-gradient(45deg,transparent 0 11px,rgba(26,20,51,.035) 11px 12px)}
+.tkt .mid{position:relative;padding:16px 18px 0;display:grid;gap:10px}
+.tkt .who{display:flex;align-items:center;gap:12px}
+.tkt .av{width:46px;height:46px;flex:none;border-radius:13px;display:grid;place-items:center;background:var(--tc);color:#fff;font-family:var(--tick);font-size:26px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
+.tkt .av img{width:100%;height:100%;object-fit:cover}
+.tkt h3{font-family:var(--tick);font-weight:400;font-size:34px;letter-spacing:.03em;line-height:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkt .sub{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkt .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;padding-top:8px;border-top:1.5px dashed rgba(26,20,51,.18)}
+.tkt .grid div{display:grid;gap:0;min-width:0}
+.tkt .grid span{font-family:var(--tick);font-size:13px;letter-spacing:.14em;color:var(--muted)}
+.tkt .grid b{font-family:var(--mono);font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkt .stubp{position:relative;border-left:2px dashed rgba(26,20,51,.25);display:grid;grid-template-rows:auto 1fr auto;justify-items:center;padding:14px 6px;background:color-mix(in srgb,var(--tc) 12%,#FFFDF8);border-radius:0 18px 18px 0}
+.tkt .stubp .adm{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--tick);font-size:22px;letter-spacing:.18em;color:var(--tc);align-self:center;white-space:nowrap}
+.tkt .stubp .bc{width:56px;height:30px}
+.tkt .stubp .no{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.tkt .stamp{position:absolute;right:14px;top:14px;z-index:2;font-family:var(--tick);font-size:16px;letter-spacing:.14em;color:#fff;padding:1px 9px;border:2px solid rgba(255,255,255,.85);border-radius:7px;transform:rotate(-5deg);background:rgba(26,20,51,.14)}
+.tkt.has-st .band .n{display:none}
+.tkt.has-st .band{padding-right:100px}
+.tkt.sm{grid-template-columns:1fr 70px}
+.tkt.sm::before,.tkt.sm::after{right:59px;width:22px;height:22px}
+.tkt.sm::before{top:-11px}.tkt.sm::after{bottom:-11px}
+.tkt.sm .stubp .adm{font-size:17px}
+
+.tkt.sm .stubp .bc{width:46px}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:70;background:rgba(255,246,234,.85);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.ann{background:var(--night);color:#fff;font-size:13.5px;overflow:hidden;white-space:nowrap}
+.ann .tr{display:inline-flex;gap:44px;padding:9px 22px 9px 0;animation:mq 50s linear infinite}
+.ann span{display:inline-flex;align-items:center;gap:10px;opacity:.9}
+.ann span i{width:6px;height:6px;border-radius:50%}
+@keyframes mq{to{transform:translateX(-50%)}}
+.hd{display:flex;align-items:center;gap:20px;height:74px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:25px;letter-spacing:-.04em;flex:none}
+.logo svg{width:42px;height:30px;transform:rotate(-8deg);filter:drop-shadow(0 4px 6px rgba(255,61,127,.35))}
+.nav{display:flex;gap:2px;padding:5px;border-radius:999px;background:rgba(255,255,255,.65);box-shadow:inset 0 0 0 1.5px var(--line)}
+.nav a{padding:8px 15px;border-radius:999px;font-weight:600;font-size:14.5px;color:var(--ink2);transition:background .15s}
+.nav a:hover{background:rgba(26,20,51,.05)}
+.nav a.on{background:var(--ink);color:#fff}
+.hd-r{margin-left:auto;display:flex;gap:10px;align-items:center}
+.ib{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:var(--sh-s),inset 0 0 0 1.5px var(--line);border:0;flex:none}
+.ib svg{width:16px;height:16px}
+.burger{display:none}
+.xbtn{background:#000!important;color:#fff;box-shadow:0 8px 18px -8px rgba(0,0,0,.6)!important}
+.xbtn:hover{transform:translateY(-2px)}
+@media (max-width:420px){.hd{gap:10px}.hd-r{gap:8px}.hd-r .btn.pri{padding:0 14px}}
+@media (max-width:1120px){.nav{display:none}.burger{display:grid}}
+@media (max-width:600px){.hd-r .hs{display:none}.logo{font-size:22px}}
+.drawer{position:fixed;inset:0;z-index:100;background:rgba(26,20,51,.5);backdrop-filter:blur(4px);display:flex;justify-content:flex-end}
+.drawer .p{width:min(360px,90vw);height:100%;background:var(--paper);padding:calc(18px + env(safe-area-inset-top,0px)) 18px 18px;display:flex;flex-direction:column;gap:8px;overflow:auto;box-shadow:var(--sh-l)}
+.drawer .p a{padding:14px 16px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:700;display:flex;align-items:center;gap:12px}
+.drawer .p a i{width:28px;height:20px;border-radius:5px}
+
+/* hero */
+.hero{position:relative;padding-block:64px 40px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;background:repeating-conic-gradient(from 0deg at 72% 46%,rgba(255,201,60,.16) 0 6deg,transparent 6deg 18deg);-webkit-mask-image:radial-gradient(circle at 72% 46%,#000 0,transparent 55%);mask-image:radial-gradient(circle at 72% 46%,#000 0,transparent 55%);pointer-events:none}
+.hero::after{content:"";position:absolute;width:620px;height:620px;right:-80px;top:-60px;border-radius:50%;background:radial-gradient(circle,rgba(255,61,127,.18),rgba(255,122,46,.1) 40%,transparent 70%);filter:blur(10px);pointer-events:none}
+.hg{display:grid;grid-template-columns:1.02fr 1fr;gap:40px;align-items:center;position:relative;z-index:1}
+@media (max-width:1000px){.hg{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(44px,6.4vw,86px);line-height:.96}
+.hero p.lede{font-size:clamp(17px,1.6vw,20px);color:var(--ink2);max-width:44ch;margin:26px 0 30px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.trust{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center;margin-top:34px;font-size:14px;color:var(--muted);font-weight:600}
+.trust span{display:inline-flex;align-items:center;gap:8px}
+.trust svg{width:18px;height:18px;color:var(--teal)}
+.scene{position:relative;height:600px}
+@media (max-width:1000px){.scene{height:560px;max-width:560px;margin:10px auto 0;width:100%}}
+@media (max-width:520px){.scene{height:480px}}
+.printer{position:absolute;left:50%;top:20px;transform:translateX(-50%);width:min(380px,84%);z-index:5}
+.printer svg{width:100%;display:block;filter:drop-shadow(0 24px 30px rgba(26,20,51,.35))}
+.pslot{position:absolute;left:50%;top:150px;transform:translateX(-50%);width:min(300px,70%);height:440px;z-index:4;pointer-events:none;overflow:hidden;padding:0 30px;box-sizing:content-box}
+@media (max-width:520px){.pslot{top:112px;padding:0 14px;left:40%;width:62%}}
+.pt{position:absolute;left:30px;right:30px;top:0;opacity:0;animation:print 9s cubic-bezier(.4,.1,.2,1) infinite}
+@media (max-width:520px){.pt{left:14px;right:14px}}
+.pt:nth-child(2){animation-delay:3s}.pt:nth-child(3){animation-delay:6s}
+@keyframes print{0%{transform:translateY(-200px);opacity:1}20%{transform:translateY(0);opacity:1}30%{transform:translateY(40px) rotate(-2deg)}62%{transform:translateY(130px) rotate(var(--rot,-6deg)) translateX(var(--tx,-20px));opacity:1}82%{transform:translateY(160px) rotate(var(--rot,-6deg)) translateX(var(--tx,-20px));opacity:1}100%{transform:translateY(230px) rotate(var(--rot,-6deg)) translateX(var(--tx,-20px));opacity:0}}
+.pt:nth-child(1){--rot:-6deg;--tx:-14px}.pt:nth-child(2){--rot:5deg;--tx:14px}.pt:nth-child(3){--rot:-2deg;--tx:0px}
+.pt .tkt{--hole:#FFF2E2}
+.phone{position:absolute;right:-14px;bottom:0;width:200px;z-index:7;border-radius:34px;background:#100C22;padding:10px;box-shadow:var(--sh-l);transform:rotate(7deg);animation:float 7s ease-in-out infinite}
+.phone .scr{border-radius:26px;background:linear-gradient(160deg,#2A1F57,#120D28 70%);padding:30px 10px 34px;min-height:300px;position:relative;overflow:hidden}
+.phone .scr::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:64px;height:18px;border-radius:12px;background:#000}
+.phone .clock{color:#fff;text-align:center;font-family:var(--display);font-weight:700;font-size:44px;letter-spacing:-.03em;margin:6px 0 2px}
+.phone .date{color:rgba(255,255,255,.7);text-align:center;font-size:12px;margin-bottom:14px}
+.notif{background:rgba(255,255,255,.93);border-radius:16px;padding:10px 11px;display:grid;grid-template-columns:30px 1fr;gap:9px;align-items:start;margin-bottom:8px;animation:pop 9s ease infinite}
+.notif:nth-of-type(2){animation-delay:3s}
+@keyframes pop{0%,8%{transform:translateY(-14px);opacity:0}14%,100%{transform:none;opacity:1}}
+.notif i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:800;font-size:15px}
+.notif b{display:flex;justify-content:space-between;font-size:11.5px;color:#1A1433}
+.notif b span{color:#776E92;font-weight:500}
+.notif p{margin:1px 0 0;font-size:11.5px;color:#41385E;line-height:1.35}
+.exmp{position:absolute;left:12px;bottom:10px;right:12px;text-align:center;font-family:var(--tick);letter-spacing:.14em;font-size:13px;color:rgba(255,255,255,.55)}
+.burst{position:absolute;z-index:1;pointer-events:none}
+.burst i{position:absolute;border-radius:3px;animation:spin 10s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:rotate(7deg) translateY(-12px)}}
+.badge-coin{position:absolute;left:4px;top:230px;z-index:8;width:118px;height:118px;border-radius:50%;background:conic-gradient(from 200deg,var(--sun),var(--orange),var(--pink),var(--grape),var(--teal),var(--sun));display:grid;place-items:center;box-shadow:var(--sh-l);animation:float2 8s ease-in-out infinite}
+.badge-coin div{width:94px;height:94px;border-radius:50%;background:var(--paper);display:grid;place-content:center;text-align:center;font-family:var(--tick);letter-spacing:.06em;line-height:.95;font-size:15px}
+.badge-coin b{font-size:28px;color:var(--pink);font-weight:400}
+@keyframes float2{50%{transform:translateY(-10px) rotate(-6deg)}}
+@media (max-width:520px){.phone{width:164px;right:-4px;bottom:10px}.phone .scr{min-height:240px}.phone .clock{font-size:34px}.badge-coin{width:92px;height:92px;top:auto;bottom:40px;left:0}.badge-coin div{width:74px;height:74px;font-size:12px}.badge-coin b{font-size:22px}}
+
+/* logos strip */
+.strip{display:flex;justify-content:center;gap:12px 34px;flex-wrap:wrap;padding:26px 0 6px;color:var(--muted);font-weight:700;font-size:15px;align-items:center}
+.strip span{display:inline-flex;align-items:center;gap:8px;opacity:.85}
+.strip i{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:#fff;font-style:normal;font-size:12px;font-weight:800}
+
+section.blk{padding-block:110px 0}
+.sh{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:end;margin-bottom:44px}
+@media (max-width:900px){.sh{grid-template-columns:1fr;gap:14px}}
+.sh h2{font-size:clamp(34px,4.8vw,62px)}
+.sh p{margin:0;color:var(--ink2);font-size:18px;max-width:46ch}
+
+/* flow */
+.flow{position:relative;padding:44px 30px 34px;overflow:hidden}
+.flow svg.path{position:absolute;left:0;right:0;top:0;width:100%;height:200px;pointer-events:none}
+.nodes{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;position:relative;z-index:1}
+@media (max-width:900px){.nodes{grid-template-columns:1fr;gap:18px}.flow svg.path{display:none}.flow{padding:28px 22px}}
+.node{display:grid;justify-items:center;text-align:center;gap:10px}
+.node .ic{width:76px;height:76px;border-radius:24px;display:grid;place-items:center;color:#fff;box-shadow:0 16px 30px -14px var(--c),inset 0 1px 0 rgba(255,255,255,.4);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 75%,#fff),var(--c))}
+.node .ic svg{width:34px;height:34px}
+.node b{font-family:var(--display);font-size:18px;letter-spacing:-.02em}
+.node span{font-size:14px;color:var(--muted);max-width:22ch}
+.node .k{font-family:var(--tick);font-size:14px;letter-spacing:.16em;color:var(--c)}
+@media (max-width:900px){.node{grid-template-columns:64px 1fr;justify-items:start;text-align:left;align-items:center;gap:2px 16px}.node .ic{grid-row:span 3;width:64px;height:64px;border-radius:20px}.node span{max-width:none}}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+.b5{grid-column:span 5}.b7{grid-column:span 7}.b4{grid-column:span 4}.b8{grid-column:span 8}.b6{grid-column:span 6}
+@media (max-width:1000px){.bento{grid-template-columns:1fr 1fr}.b5,.b7,.b4,.b8,.b6{grid-column:span 1}.b8{grid-column:1/-1}}
+@media (max-width:680px){.bento{grid-template-columns:1fr}.b8{grid-column:auto}}
+.bento .card{overflow:hidden}
+.bento h3{font-size:26px;margin-bottom:8px}
+.bento p.d{margin:0 0 18px;color:var(--ink2);font-size:15.5px;max-width:44ch}
+.estg{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:center}
+@media (max-width:680px){.estg{grid-template-columns:1fr}}
+.seg{display:inline-flex;padding:4px;border-radius:999px;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line)}
+.seg button{border:0;background:none;padding:8px 16px;border-radius:999px;font-weight:700;font-size:14px;color:var(--ink2);display:flex;align-items:center;gap:7px;transition:background .15s,color .15s}
+.seg button[aria-pressed="true"].v{background:var(--venmo);color:#fff;box-shadow:0 6px 14px -6px var(--venmo)}
+.seg button[aria-pressed="true"].c{background:var(--cash);color:#fff;box-shadow:0 6px 14px -6px var(--cash)}
+.seg button[aria-pressed="true"].x{background:var(--ink);color:#fff}
+.acct{padding:20px;border-radius:18px;color:#fff;display:grid;gap:4px;position:relative;overflow:hidden;transition:background .25s}
+.acct::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.14)}
+.acct small{font-family:var(--tick);letter-spacing:.16em;font-size:15px;opacity:.9}
+.acct b{font-family:var(--display);font-size:28px;letter-spacing:-.02em}
+.acct .r{display:flex;justify-content:space-between;align-items:center;font-size:14px;opacity:.95;margin-top:6px;gap:10px}
+.bal{display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--paper);font-size:14px}
+.bal b{margin-left:auto;font-family:var(--display);font-size:18px;color:var(--teal)}
+.printout{font-family:var(--mono);font-size:13.5px;background:#FFFDF6;border-radius:6px 6px 0 0;padding:18px 18px 22px;position:relative;box-shadow:inset 0 0 0 1.5px var(--line);margin-bottom:12px;overflow-x:auto}
+.printout::after{content:"";position:absolute;left:0;right:0;bottom:-12px;height:12px;background:linear-gradient(-45deg,transparent 7px,#FFFDF6 7px) 0 0/14px 12px repeat-x,linear-gradient(45deg,transparent 7px,#FFFDF6 7px) 0 0/14px 12px repeat-x}
+.printout .hd2{text-align:center;font-weight:700;letter-spacing:.2em;margin-bottom:10px}
+.printout table{width:100%;border-collapse:collapse}
+.printout th{text-align:left;padding:5px 4px;border-bottom:1.5px dashed rgba(26,20,51,.35);font-size:12px;letter-spacing:.12em}
+.printout td{padding:5px 4px}
+.printout td:nth-child(2){color:var(--muted)}
+.printout .tot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1.5px dashed rgba(26,20,51,.35);margin-top:10px;padding-top:10px;font-weight:700}
+.range{width:100%;accent-color:var(--pink);height:26px}
+.estv{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.estv b{font-family:var(--display);font-size:clamp(40px,5vw,60px);letter-spacing:-.04em;line-height:1.05}
+.spark{height:70px;margin-top:10px;width:100%;display:block}
+.mini-tk{transform:rotate(-3deg);margin:16px 0 4px}
+.mini-tk .tkt{--hole:#FFD25A}
+
+/* night band */
+.night{background:radial-gradient(ellipse 60% 70% at 85% 20%,rgba(110,85,255,.35),transparent 70%),radial-gradient(ellipse 50% 60% at 10% 90%,rgba(255,61,127,.25),transparent 70%),var(--night);color:#fff;padding-block:110px;margin-top:110px;position:relative;overflow:hidden}
+.night::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1.2px);background-size:22px 22px;pointer-events:none}
+.night .sh p{color:rgba(255,255,255,.75)}
+.night .eyebrow{color:var(--sun)}
+.life{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative}
+@media (max-width:900px){.life{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.life{grid-template-columns:1fr}}
+.stage{padding:20px;border-radius:20px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.12);display:grid;gap:8px;transition:transform .3s,background .3s,box-shadow .3s}
+.stage .i{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 30%,transparent);color:var(--c)}
+.stage .i svg{width:22px;height:22px}
+.stage b{font-family:var(--display);font-size:19px}
+.stage span{font-size:14px;color:rgba(255,255,255,.7)}
+.stage.on{transform:translateY(-8px);background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1.5px var(--c),0 20px 40px -20px var(--c)}
+.stage .bar{height:4px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+.stage .bar i{display:block;height:100%;width:0;background:var(--c)}
+.stage.on .bar i{animation:fill 1.6s linear forwards}
+@keyframes fill{to{width:100%}}
+.night .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:60px;align-items:center;position:relative}
+@media (max-width:900px){.night .split{grid-template-columns:1fr}}
+.code{background:#0E0A1F;border-radius:18px;padding:22px;font-family:var(--mono);font-size:14px;line-height:1.8;color:#E7E1FF;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.1);overflow-x:auto;white-space:nowrap}
+.code .ck{color:var(--sun)}.code .cc{color:#8A83B0}.code .cf{color:#7EF2E4}.code .cs{color:#FF9EC2}
+
+/* token */
+.tokwrap{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+@media (max-width:950px){.tokwrap{grid-template-columns:1fr;gap:40px}}
+.bigtk{transform:rotate(-4deg);padding:10px}
+.bigtk .tkt{grid-template-columns:1fr 120px}
+.bigtk .tkt::before,.bigtk .tkt::after{right:108px}
+.bigtk .tkt h3{font-size:clamp(46px,6.4vw,88px)}
+.bigtk .tkt .band{height:70px}.bigtk .tkt .foil{top:70px}
+@media (max-width:520px){.bigtk .tkt{grid-template-columns:1fr 80px}.bigtk .tkt::before,.bigtk .tkt::after{right:68px}}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.facts div{padding:16px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
+.facts span{font-size:13px;color:var(--muted);font-weight:600}
+.facts b{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em}
+
+/* faq */
+.faqg{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:start}
+@media (max-width:900px){.faqg{grid-template-columns:1fr;gap:20px}}
+.faq{display:grid;gap:12px}
+.faq details{border-radius:18px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);transition:box-shadow .2s}
+.faq details[open]{box-shadow:var(--sh),inset 0 0 0 1.5px var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:700;font-size:16.5px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";width:28px;height:28px;flex:none;border-radius:50%;background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 6v12M6 12h12' stroke='%231A1433' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center/14px no-repeat;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg);background-color:var(--sun)}
+.faq p{margin:0;padding:0 22px 20px;color:var(--ink2);max-width:70ch}
+.final{margin-top:110px;border-radius:32px;padding:70px 28px;text-align:center;color:#fff;position:relative;overflow:hidden;background:linear-gradient(120deg,var(--pink),var(--orange) 50%,var(--sun))}
+.final::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 2px,transparent 2px 30px)}
+.final h2{font-size:clamp(36px,5.6vw,72px);position:relative;text-shadow:0 4px 24px rgba(26,20,51,.25)}
+.final p{position:relative;font-size:19px;margin:16px auto 28px;max-width:48ch;opacity:.95}
+.final .cta{justify-content:center;position:relative}
+footer{margin-top:110px;background:var(--night);color:#fff;padding-block:60px 120px;position:relative;overflow:hidden}
+footer .mark{font-family:var(--display);font-weight:800;font-size:clamp(90px,20vw,260px);letter-spacing:-.06em;line-height:.8;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0));-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:40px;user-select:none}
+.ft{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
+@media (max-width:800px){.ft{grid-template-columns:1fr 1fr}.ft>div:first-child{grid-column:1/-1}}
+.ft h4{font-family:var(--tick);font-weight:400;font-size:17px;letter-spacing:.14em;color:var(--sun);margin-bottom:12px}
+.ft a.l{display:block;padding:4px 0;color:rgba(255,255,255,.8);font-weight:500}
+.ft a.l:hover{color:#fff}
+@media (min-width:1121px){footer{padding-bottom:60px}}
+
+/* app pages */
+.ph{position:relative;padding-block:56px 40px;overflow:hidden}
+.ph::before{content:"";position:absolute;right:-120px;top:-120px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,var(--pc,rgba(255,61,127,.2)),transparent 70%);pointer-events:none}
+.ph .in{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;position:relative}
+.ph h1{font-size:clamp(40px,6vw,76px)}
+.ph p{margin:14px 0 0;color:var(--ink2);font-size:18px;max-width:52ch}
+.lg{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:1000px){.lg{grid-template-columns:1fr}}
+.fs{padding:28px;display:grid;gap:18px}
+@media (max-width:520px){.fs{padding:22px}}
+.fs .t{display:flex;gap:16px;align-items:flex-start}
+.fs .t .n{flex:none;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-family:var(--tick);font-size:24px;color:#fff;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));box-shadow:0 10px 20px -10px var(--c)}
+.fs .t h3{font-size:22px}
+.fs .t p{margin:4px 0 0;color:var(--ink2);font-size:15px}
+.opt{font-family:var(--tick);font-size:13px;letter-spacing:.12em;padding:2px 8px;border-radius:6px;background:var(--paper);color:var(--muted);margin-left:8px;vertical-align:middle;font-weight:400}
+.f{display:grid;gap:7px;min-width:0}
+.f label,.lab{font-weight:700;font-size:14px;color:var(--ink2)}
+.inp{width:100%;height:54px;border-radius:15px;border:0;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line);padding:0 16px;font-size:16px;outline:none;transition:box-shadow .15s,background .15s}
+.inp:hover{background:#FFF1DF}
+.inp:focus{background:#fff;box-shadow:inset 0 0 0 2px var(--grape),0 0 0 5px rgba(110,85,255,.15)}
+textarea.inp{height:auto;min-height:110px;padding:14px 16px;resize:vertical}
+.cnt{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right}
+.upl{display:flex;gap:16px;align-items:center}
+.upl label{width:104px;height:104px;flex:none;border-radius:22px;background:var(--paper);box-shadow:inset 0 0 0 2px rgba(26,20,51,.18);display:grid;place-items:center;text-align:center;font-weight:700;font-size:12.5px;color:var(--ink2);cursor:pointer;overflow:hidden;transition:box-shadow .15s}
+.upl label:hover{box-shadow:inset 0 0 0 2px var(--grape)}
+.upl label img{width:100%;height:100%;object-fit:cover}
+.two{display:grid;grid-template-columns:1fr 170px;gap:14px}
+@media (max-width:540px){.two{grid-template-columns:1fr!important}}
+.norm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px}
+.norm code{font-family:var(--mono);padding:6px 10px;border-radius:10px;background:var(--night);color:var(--sun);overflow-wrap:anywhere}
+.sum{position:sticky;top:130px;display:grid;gap:18px;min-width:0}
+@media (max-width:1000px){.sum{position:static}}
+.kv{display:grid}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1.5px dashed rgba(26,20,51,.15);font-size:15px}
+.kv div:last-child{border-bottom:0}
+.kv span{color:var(--muted);font-weight:600;flex:none}
+.kv b{text-align:right;font-weight:700;overflow-wrap:anywhere;min-width:0}
+.kv .tot{font-size:17px}.kv .tot b{font-family:var(--display);font-size:20px}
+.after{display:grid;gap:14px;counter-reset:a}
+.after div{display:grid;grid-template-columns:34px 1fr;gap:12px;font-size:15px;color:var(--ink2)}
+.after div::before{counter-increment:a;content:counter(a);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--tick);font-size:19px;color:#fff;background:var(--grape)}
+.errbox{padding:12px 14px;border-radius:14px;background:#FFE3EE;color:#B0124A;font-weight:600;font-size:14.5px}
+.tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+.srch{flex:1;min-width:240px;position:relative}
+.srch svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.srch .inp{padding-left:44px;background:#fff}
+.pills{display:flex;gap:6px;flex-wrap:wrap;padding:5px;border-radius:999px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
+.pills button{border:0;background:none;padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--ink2)}
+.pills button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:28px}
+@media (max-width:420px){.tgrid{grid-template-columns:1fr}}
+.tblw{overflow-x:auto;border-radius:var(--r);background:var(--card);box-shadow:var(--sh),inset 0 0 0 1.5px var(--line)}
+table.t{width:100%;border-collapse:collapse;min-width:680px;font-size:15px}
+table.t th{text-align:left;font-family:var(--tick);font-weight:400;font-size:15px;letter-spacing:.14em;color:var(--muted);padding:16px 20px;border-bottom:1.5px solid var(--line)}
+table.t td{padding:16px 20px;border-bottom:1.5px dashed rgba(26,20,51,.12)}
+table.t tr:last-child td{border-bottom:0}
+.empty{display:grid;place-items:center;text-align:center;gap:12px;padding:56px 24px}
+.empty .art{width:150px}
+.empty b{font-family:var(--display);font-size:24px;letter-spacing:-.02em}
+.empty p{margin:0;color:var(--ink2);max-width:46ch}
+.tblw .empty{position:sticky;left:0;width:min(100%,calc(100vw - 40px))}
+.statg{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
+@media (max-width:900px){.statg{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.statg{gap:12px}.stat{padding:18px!important}.stat b{font-size:26px!important}}
+.stat{padding:22px;overflow:hidden}
+.stat .i{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;background:var(--c);margin-bottom:14px;box-shadow:0 10px 20px -10px var(--c)}
+.stat .i svg{width:20px;height:20px}
+.stat span{font-weight:600;font-size:14px;color:var(--muted)}
+.stat b{display:block;font-family:var(--display);font-size:34px;letter-spacing:-.03em;line-height:1.1}
+.stat small{color:var(--muted);font-size:13px}
+.chart svg{width:100%;height:auto;display:block}
+.stepper{display:flex;gap:0;align-items:center;margin-bottom:6px}
+.stepper span{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--muted)}
+.stepper span i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--tick);font-size:18px;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line)}
+.stepper span.on{color:var(--ink)}.stepper span.on i{background:var(--pink);color:#fff;box-shadow:0 8px 16px -8px var(--pink)}
+.stepper span.done i{background:var(--teal);color:#fff}
+.stepper .ln{flex:1;height:2px;background:var(--line);margin:0 12px;min-width:12px}
+@media (max-width:420px){.stepper span{font-size:13px;gap:6px}.stepper .ln{margin:0 6px}}
+.phonein{display:grid;grid-template-columns:120px 1fr;gap:10px}
+.cg{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media (max-width:950px){.cg{grid-template-columns:1fr}}
+.docs{display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:900px){.docs{grid-template-columns:1fr}.docs nav{position:static!important;flex-direction:row!important;flex-wrap:wrap}.docs nav b{width:100%}}
+.docs nav{position:sticky;top:130px;display:flex;flex-direction:column;gap:2px}
+.docs nav b{font-family:var(--tick);font-weight:400;font-size:15px;letter-spacing:.16em;margin:14px 0 4px 12px;color:var(--pink)}
+.docs nav a{padding:7px 12px;border-radius:10px;font-weight:600;font-size:15px;color:var(--ink2)}
+.docs nav a:hover{background:var(--card)}
+.docs article{display:grid;gap:24px;min-width:0}
+.docs article>div{padding:32px;overflow-x:auto}
+@media (max-width:520px){.docs article>div{padding:22px}}
+.docs h2{font-size:30px;margin-bottom:14px}
+.docs p,.docs li{color:var(--ink2);max-width:72ch}
+.docs table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:10px}
+.docs th,.docs td{text-align:left;padding:10px 12px;border-bottom:1.5px dashed rgba(26,20,51,.14)}
+.docs th{font-family:var(--tick);font-weight:400;letter-spacing:.14em;font-size:15px;color:var(--muted)}
+.docs pre{background:var(--night);color:#E7E1FF;border-radius:16px;padding:18px;overflow:auto;font-family:var(--mono);font-size:13.5px;line-height:1.7}
+.note{padding:14px 18px;border-radius:16px;background:#FFF1C9;font-weight:600;font-size:15px;color:#5A4300;display:flex;gap:10px}
+.note.warn{background:#FFE3EE;color:#9E1146}
+.mnav{position:fixed;left:0;right:0;bottom:0;z-index:80;display:none;grid-template-columns:repeat(5,1fr);background:rgba(27,20,53,.96);backdrop-filter:blur(10px);padding:8px max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+.mnav a{display:grid;justify-items:center;gap:3px;color:rgba(255,255,255,.65);font-size:11.5px;font-weight:600}
+.mnav a svg{width:22px;height:22px}
+.mnav a.on{color:var(--sun)}
+@media (max-width:1120px){.mnav{display:grid}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(120px + env(safe-area-inset-top,0px));z-index:200;padding:13px 20px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600;box-shadow:var(--sh-l);max-width:calc(100% - 32px);text-align:center}
+#boom{position:fixed;inset:0;pointer-events:none;z-index:150}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.reveal{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
+.js .reveal.pre{opacity:.001;transform:translateY(26px)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.js .reveal.pre{opacity:1;transform:none}.pt{opacity:1}.pt:nth-child(1){transform:translateY(120px) rotate(-6deg)}.pt:nth-child(2){transform:translateY(60px) rotate(4deg)}.pt:nth-child(3){transform:translateY(0)}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="lgS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5A93"/><stop offset="1" stop-color="#FF7A2E"/></linearGradient></defs>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M14 3c4 0 7 3 7 7l-6 6-5-5 6-6zM9 13l-4 1-2 4 4-1M11 15l-1 4 4-2 1-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="15.5" cy="8.5" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-vault" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8.5V7M12 17v-1.5M8.5 12H7M17 12h-1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-sweep" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 3v4h-4M6 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14.8 9.2c-.5-.8-1.6-1.3-2.8-1.3-1.6 0-2.8.8-2.8 2s1.2 1.7 2.8 2.1 2.8.9 2.8 2.1-1.2 2-2.8 2c-1.3 0-2.4-.5-2.9-1.3M12 6.5v11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L3 10.5l7 2.5 2.5 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 13l5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .7 3.2 2.5 3.6 5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 7.5v9" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.9 2H22l-7.6 8.7L23 22h-6.7l-5.2-6.9L5 22H2l8.2-9.3L1.5 2h6.9l4.7 6.3L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20z" fill="currentColor"/></symbol>
+</svg>
+
+<header>
+  <div class="ann" aria-hidden="true"><div class="tr" id="ann"></div></div>
+  <div class="wrap hd">
+    <a class="logo" href="#home" aria-label="Stubs home"><svg viewBox="0 0 44 32" aria-hidden="true"><path d="M2 5h40v8a3 3 0 0 0 0 6v8H2v-8a3 3 0 0 0 0-6z" fill="url(#lgS)"/><path d="M31 7v18" stroke="#FFF6EA" stroke-width="2" stroke-dasharray="2.5 2.5"/><path d="M8 12h15M8 17h10" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="36.5" cy="16" r="2.6" fill="#FFC93C"/></svg>Stubs</a>
+    <nav class="nav" aria-label="Main"><a href="#explore" data-nav="explore">Explore</a><a href="#launch" data-nav="launch">Launch</a><a href="#claim" data-nav="claim">Claim fees</a><a href="#payouts" data-nav="payouts">Payouts</a><a href="#analytics" data-nav="analytics">Analytics</a><a href="#maker" data-nav="maker">Stub Maker</a><a href="#docs" data-nav="docs">Docs</a></nav>
+    <div class="hd-r">
+      <a class="ib xbtn" id="xTop" href="https://x.com/UseStubs" target="_blank" rel="noopener" aria-label="Stubs on X"><svg><use href="#i-x"/></svg></a>
+      <button class="btn sm hs" id="walBtn" type="button">Connect wallet</button>
+      <a class="btn sm pri" href="#launch">Launch coin</a>
+      <button class="ib burger" id="burger" type="button" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="#1A1433" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="drawer" id="drawer" hidden><div class="p" role="dialog" aria-label="Menu">
+  <button class="btn sm" id="drX" type="button" style="align-self:flex-end">Close</button>
+  <a href="#home"><i style="background:var(--sun)"></i>Home</a><a href="#explore"><i style="background:var(--teal)"></i>Explore</a><a href="#launch"><i style="background:var(--pink)"></i>Launch</a><a href="#claim"><i style="background:var(--cash)"></i>Claim fees</a><a href="#payouts"><i style="background:var(--orange)"></i>Payouts</a><a href="#analytics"><i style="background:var(--grape)"></i>Analytics</a><a href="#maker"><i style="background:var(--lime)"></i>Stub Maker</a><a href="#coin"><i style="background:var(--sky)"></i>$STUBS</a><a href="#docs"><i style="background:var(--ink)"></i>Docs</a>
+  <a id="xDr" href="https://x.com/UseStubs" target="_blank" rel="noopener"><i style="background:#000"></i>Follow on X ↗</a>
+  <button class="btn dark" id="walBtn2" type="button" style="margin-top:8px">Connect wallet</button>
+</div></div>
+
+<main>
+<!-- ================= HOME ================= -->
+<div data-view="home">
+  <section class="hero">
+    <div class="wrap hg">
+      <div>
+        <span class="chip"><span class="live"></span>Built on pump.fun · Solana mainnet</span>
+        <h1 style="margin-top:22px">Creator fees,<br>paid out to <span class="under">Venmo<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 50 4, 120 4, 197 12" stroke="#3D95CE" stroke-width="7" fill="none" stroke-linecap="round"/></svg></span> &amp; <span class="under">Cash&nbsp;App<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12 C 60 18, 140 3, 197 10" stroke="#00C244" stroke-width="7" fill="none" stroke-linecap="round"/></svg></span>.</h1>
+        <p class="lede">Launch a coin on pump.fun and name who gets its creator fees with a phone number or username. Every trade fills that coin's own vault, and Stubs pays it out in real dollars.</p>
+        <div class="cta"><a class="btn pri" href="#launch"><svg class="ico"><use href="#i-rocket"/></svg>Launch a coin</a><a class="btn" href="#claim"><svg class="ico"><use href="#i-ticket"/></svg>Claim your fees</a></div>
+        <div class="trust"><span><svg><use href="#i-check"/></svg>No wallet needed to get paid</span><span><svg><use href="#i-check"/></svg>One signature to launch</span><span><svg><use href="#i-check"/></svg>Stubs takes 0% of fees</span></div>
+      </div>
+      <div class="scene" aria-label="Animated illustration: a ticket printer prints coin stubs while a phone shows example payout notifications">
+        <div class="burst" id="burst" style="inset:0"></div>
+        <div class="printer"><svg viewBox="0 0 380 190" aria-hidden="true"><defs><linearGradient id="pb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E2459"/><stop offset="1" stop-color="#17112F"/></linearGradient><linearGradient id="ptg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF5A93"/><stop offset=".5" stop-color="#FF7A2E"/><stop offset="1" stop-color="#FFC93C"/></linearGradient></defs>
+          <rect x="10" y="20" width="360" height="140" rx="34" fill="url(#pb)"/><rect x="10" y="20" width="360" height="22" rx="11" fill="url(#ptg)"/><rect x="30" y="58" width="190" height="56" rx="14" fill="#0D0A1C"/><circle cx="208" cy="70" r="4" fill="#00C244"><animate attributeName="opacity" values="1;.2;1" dur="1.2s" repeatCount="indefinite"/></circle><text x="46" y="84" fill="#7EF2E4" font-family="Courier Prime,monospace" font-size="15" font-weight="700">PRINTING</text><text x="46" y="104" fill="#FFC93C" font-family="Courier Prime,monospace" font-size="15" font-weight="700" id="lcd">$GRAN → VENMO</text>
+          <circle cx="262" cy="86" r="16" fill="#FF3D7F"/><circle cx="262" cy="86" r="7" fill="#FFB3D1"/><circle cx="306" cy="86" r="16" fill="#10BFAE"/><circle cx="306" cy="86" r="7" fill="#B9F3E9"/><rect x="246" y="112" width="76" height="8" rx="4" fill="#3E3277"/>
+          <rect x="54" y="132" width="272" height="20" rx="10" fill="#08060F"/><rect x="62" y="139" width="256" height="6" rx="3" fill="#2B2250"/></svg></div>
+        <div class="pslot" id="pslot"></div>
+        <div class="badge-coin" aria-hidden="true"><div><span>CREATOR FEE</span><b>0%</b><span>TO STUBS</span></div></div>
+        <div class="phone" aria-hidden="true"><div class="scr"><div class="clock" id="clk">9:41</div><div style="height:14px"></div>
+          <div class="notif"><i style="background:var(--cash)">$</i><div><b>Cash App <span>now</span></b><p>You received $18.42 · fees from $GRAN</p></div></div>
+          <div class="notif"><i style="background:var(--venmo)">V</i><div><b>Venmo <span>2m</span></b><p>You received $7.10 · fees from $MAYA</p></div></div>
+          <div class="exmp">EXAMPLE NOTIFICATIONS</div></div></div>
+      </div>
+    </div>
+    <div class="wrap"><div class="strip" aria-label="Works with"><span><i style="background:#5FD38A;color:#0B3B1E">P</i>pump.fun</span><span><i style="background:var(--venmo)">V</i>Venmo</span><span><i style="background:var(--cash)">$</i>Cash App</span><span><i style="background:#2775CA">U</i>USDC</span><span><i style="background:#C7A1FF;color:#2A1B5C">J</i>Jupiter</span><span><i style="background:linear-gradient(135deg,#9945FF,#14F195)">S</i>Solana</span></div></div>
+  </section>
+
+  <section class="wrap blk" style="padding-top:80px">
+    <div class="sh reveal"><div><span class="eyebrow">How the money moves</span><h2>One signature to launch.<br><span class="grad">Zero</span> to get paid.</h2></div><p>The launcher signs once. The person getting paid never touches a wallet, an exchange or a token. They just see dollars arrive.</p></div>
+    <div class="card flow reveal">
+      <svg class="path" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true"><path id="fp" d="M100 82 C 200 30, 300 130, 400 82 S 600 30, 700 82 S 850 130, 900 82" fill="none" stroke="rgba(26,20,51,.15)" stroke-width="3" stroke-dasharray="6 10"/><circle r="7" fill="#FF3D7F"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#fp"/></animateMotion></circle><circle r="7" fill="#10BFAE"><animateMotion dur="5s" begin="1.7s" repeatCount="indefinite"><mpath href="#fp"/></animateMotion></circle><circle r="7" fill="#FFC93C"><animateMotion dur="5s" begin="3.4s" repeatCount="indefinite"><mpath href="#fp"/></animateMotion></circle></svg>
+      <div class="nodes">
+        <div class="node" style="--c:#FF3D7F"><span class="ic"><svg><use href="#i-rocket"/></svg></span><span class="k">STEP 01</span><b>Launch &amp; name them</b><span>A phone number, Venmo @username or Cash App $cashtag.</span></div>
+        <div class="node" style="--c:#FF7A2E"><span class="ic"><svg><use href="#i-vault"/></svg></span><span class="k">STEP 02</span><b>Trades fill the vault</b><span>pump.fun's creator fee lands in that coin's own vault.</span></div>
+        <div class="node" style="--c:#6E55FF"><span class="ic"><svg><use href="#i-sweep"/></svg></span><span class="k">STEP 03</span><b>Keeper sweeps</b><span>Fees are collected on a schedule, from 0.005 SOL.</span></div>
+        <div class="node" style="--c:#3A9BFF"><span class="ic"><svg><use href="#i-coin"/></svg></span><span class="k">STEP 04</span><b>Swapped to USDC</b><span>On Jupiter, so the dollar value is locked in.</span></div>
+        <div class="node" style="--c:#00C244"><span class="ic"><svg><use href="#i-phone"/></svg></span><span class="k">STEP 05</span><b>Dollars arrive</b><span>In their Venmo or Cash App, usually within minutes.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap blk">
+    <div class="sh reveal"><div><span class="eyebrow">Everything included</span><h2>Built like a <span class="grad">box office.</span></h2></div><p>Every coin gets its own stub: its own creator key, its own vault, and a recipient who can claim in under a minute.</p></div>
+    <div class="bento">
+      <div class="card pad b5 reveal" style="background:linear-gradient(170deg,#fff 40%,#EEF6FF)">
+        <div class="chead"><b>FEES ROUTE TO</b><div class="seg" id="homeSeg"><button type="button" class="v" aria-pressed="true" data-a="venmo">Venmo</button><button type="button" class="c" aria-pressed="false" data-a="cash">Cash App</button></div></div>
+        <h3>Their app. Their dollars.</h3><p class="d">They pick Venmo or Cash App once. Every sweep after that lands there in USD.</p>
+        <div class="acct" id="homeAcct" style="background:linear-gradient(135deg,#4FA6DE,#3D95CE)"><small id="homeApp">VENMO</small><b id="homeHandle">@maya-chen</b><div class="r"><span>Deposited in USD</span><span>Example handle</span></div></div>
+        <div class="bal"><svg class="ico" style="color:var(--teal)"><use href="#i-shield"/></svg>Verified by a texted code<b>✓</b></div>
+      </div>
+      <div class="card pad b7 reveal">
+        <div class="chead"><b>ATTRIBUTION IS PER-MINT</b><span class="chip dark">No shared vault</span></div>
+        <h3>Fees never mix.</h3><p class="d">Each coin derives its own creator key, so its vault balance is exactly that coin's unswept fees, checkable on any explorer.</p>
+        <div class="printout"><div class="hd2">*** STUBS VAULT RECEIPT ***</div><table><thead><tr><th>FIELD</th><th>LEN</th><th>VALUE</th></tr></thead><tbody><tr><td>seed</td><td>32</td><td>HMAC(master, mint)</td></tr><tr><td>creator</td><td>32</td><td>ed25519(seed).pub</td></tr><tr><td>vault</td><td>32</td><td>pda(creator)</td></tr><tr><td>fees</td><td>u64</td><td>balance(vault)</td></tr></tbody></table><div class="tot"><span>PAYOUT</span><span>usd(fees) → Venmo / Cash App</span></div></div>
+      </div>
+      <div class="card pad b8 reveal" style="background:linear-gradient(160deg,#fff 30%,#FFF0F5)">
+        <div class="chead"><b>FEE ESTIMATOR</b><span class="chip">Your inputs · not a forecast</span></div>
+        <div class="estg">
+          <div style="display:grid;gap:14px"><div class="f"><label for="eVol">Daily trading volume · <b id="eVolT" style="color:var(--pink)">$25,000</b></label><input type="range" class="range" id="eVol" min="0" max="100" value="55"></div><div class="f"><label for="eDays">Days of trading · <b id="eDaysT" style="color:var(--pink)">30</b></label><input type="range" class="range" id="eDays" min="1" max="365" value="30"></div></div>
+          <div><span class="muted" style="font-weight:600">Recipient earns per day</span><div class="estv"><b class="grad" id="eDay">$75</b></div><span class="muted" style="font-size:14px">≈ <b id="eTot" style="color:var(--ink)">$2,250</b> over <span id="eTotD">30</span> days at pump.fun's 0.30% bonding-curve creator fee. After graduation, PumpSwap's creator fee varies with market cap (0.05%–0.95%).</span><svg class="spark" id="eSpark" viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+        </div>
+      </div>
+      <div class="card pad b4 reveal" style="background:linear-gradient(160deg,#FFE9A8,#FFC93C)">
+        <div class="chead"><b style="color:#5A4300">STUB MAKER</b><span class="chip" style="background:#fff">New</span></div>
+        <h3>Tell them they've got money.</h3><p class="d" style="color:#5A4300;margin-bottom:0">Make a ticket card and a ready-to-text message for whoever you launched for.</p>
+        <div class="mini-tk" id="miniTk"></div>
+        <a class="btn dark sm" href="#maker" style="margin-top:18px">Make a stub →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="night">
+    <div class="wrap">
+      <div class="sh reveal"><div><span class="eyebrow">Payout lifecycle</span><h2>Watch every dollar <span class="grad">move.</span></h2></div><p>Each payout shows its stage live on the claim dashboard and the public ledger, with every sweep and swap linked on-chain.</p></div>
+      <div class="life" id="life">
+        <div class="stage" style="--c:#FF5A93"><span class="i"><svg><use href="#i-sweep"/></svg></span><b>Swept</b><span>Fees collected from the vault</span><div class="bar"><i></i></div></div>
+        <div class="stage" style="--c:#FF9A5C"><span class="i"><svg><use href="#i-coin"/></svg></span><b>USDC</b><span>Swapped on Jupiter, value fixed</span><div class="bar"><i></i></div></div>
+        <div class="stage" style="--c:#FFC93C"><span class="i"><svg><use href="#i-clock"/></svg></span><b>Awaiting</b><span>Waits for a linked account</span><div class="bar"><i></i></div></div>
+        <div class="stage" style="--c:#7EF2E4"><span class="i"><svg><use href="#i-send"/></svg></span><b>Sending</b><span>Dollars on their way</span><div class="bar"><i></i></div></div>
+        <div class="stage" style="--c:#6EE7A0"><span class="i"><svg><use href="#i-check"/></svg></span><b>Deposited</b><span>In their Venmo or Cash App</span><div class="bar"><i></i></div></div>
+      </div>
+      <div class="split">
+        <div class="reveal"><h3 style="font-size:clamp(28px,3.4vw,42px)">The keeper, in plain English.</h3><p style="color:rgba(255,255,255,.75);font-size:17px;max-width:48ch">On every run it re-derives each coin's key, reads both pump.fun vaults (curve and PumpSwap), skips anything under 0.005 SOL, collects the rest, swaps it to USDC and records the payout. If the recipient has linked an account, it's sent right away. If not, it waits safely.</p><a class="btn sun" href="#docs" style="margin-top:10px">Read the docs</a></div>
+        <div class="code reveal"><span class="cc">// every scheduled run</span><br><span class="ck">for</span> coin <span class="ck">in</span> live_coins:<br>&nbsp;&nbsp;key&nbsp;&nbsp;= <span class="cf">derive</span>(master, coin.mint)<br>&nbsp;&nbsp;fees = <span class="cf">vault_balance</span>(key)<br>&nbsp;&nbsp;<span class="ck">if</span> fees &lt; <span class="cs">0.005 SOL</span>: <span class="ck">continue</span><br>&nbsp;&nbsp;usdc = <span class="cf">jupiter_swap</span>(<span class="cf">collect</span>(key))<br>&nbsp;&nbsp;<span class="cf">pay</span>(coin.recipient, usdc) <span class="cc">// Venmo · Cash App</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap blk" id="tokenSec">
+    <div class="tokwrap">
+      <div class="bigtk reveal" id="bigTk"></div>
+      <div class="reveal"><span class="eyebrow">The house coin</span><h2 style="font-size:clamp(40px,5.6vw,72px)">$STUBS, printed on <span class="grad">pump.fun.</span></h2><p style="color:var(--ink2);font-size:18px;margin:18px 0 0;max-width:46ch">A fair launch through Stubs itself, so $STUBS's own creator fees route through the same vault-and-keeper flow as every other coin. The contract address drops on X at launch.</p>
+        <div class="facts"><div><span>Launchpad</span><b>pump.fun</b></div><div><span>Supply</span><b>1,000,000,000</b></div><div><span>Team allocation</span><b>None · fair launch</b></div><div><span>Mint &amp; freeze</span><b>Revoked by pump.fun</b></div><div><span>Creation fee</span><b>0 SOL · network only</b></div><div><span>Graduates to</span><b>PumpSwap at ~85 SOL</b></div></div>
+        <div class="cta" style="margin-top:24px"><a class="btn pri" href="#coin">$STUBS page →</a><a class="btn" id="tokX" href="https://x.com/UseStubs" target="_blank" rel="noopener"><svg class="ico"><use href="#i-x"/></svg>CA drops on X</a></div></div>
+    </div>
+  </section>
+
+  <section class="wrap blk">
+    <div class="sh reveal" style="align-items:center"><div><span class="eyebrow">Fresh off the printer</span><h2>Top <span class="grad">coins</span></h2></div><div><a class="btn sm" href="#explore">View all →</a></div></div>
+    <div data-coinlist="3"></div>
+  </section>
+
+  <section class="wrap blk">
+    <div class="faqg">
+      <div class="reveal"><span class="eyebrow">Questions</span><h2 style="font-size:clamp(34px,4.6vw,58px)">Asked at the <span class="grad">box office.</span></h2><p style="color:var(--ink2);font-size:17px;margin:16px 0 22px">Still unsure? The docs explain fees, sweeps and claims in plain language.</p><a class="btn dark" href="#docs">Read the docs</a></div>
+      <div class="faq reveal">
+        <details open><summary>Does the person getting paid need crypto?</summary><p>No. They verify their phone number with a texted code and link the Venmo or Cash App they already have. No wallet, no exchange, no tokens.</p></details>
+        <details><summary>Does Stubs take a cut of the fees?</summary><p>No. Stubs takes nothing from the creator fee. Conversion and deposit costs are shown on each payout.</p></details>
+        <details><summary>Can I change the recipient after launch?</summary><p>No. The recipient is written into the coin when it's minted. Double-check the number or handle before you sign. Fees pointed at a typo can't be claimed.</p></details>
+        <details><summary>What if they never claim?</summary><p>Their payouts wait as "Awaiting payout method" and are released the moment they link an account. The Stub Maker helps you tell them.</p></details>
+        <details><summary>Can I launch for someone outside the US?</summary><p>Yes, you can name anyone. Venmo and Cash App are US-only, so their payouts wait until a supported account is linked.</p></details>
+      </div>
+    </div>
+    <div class="final reveal"><h2>Print someone a payday.</h2><p>Launch a coin for a friend, a creator or yourself. Every trade sends them dollars.</p><div class="cta"><a class="btn dark" href="#launch"><svg class="ico"><use href="#i-rocket"/></svg>Launch a coin</a><a class="btn" href="#maker">Make a stub</a></div></div>
+  </section>
+</div>
+
+<!-- ================= EXPLORE ================= -->
+<div data-view="explore" hidden>
+  <div class="ph" style="--pc:rgba(16,191,174,.22)"><div class="wrap in"><div><span class="eyebrow" style="color:var(--teal)">Explore</span><h1>Every stub <span class="grad">printed.</span></h1><p>Every coin launched through Stubs, where its fees go, and whether they've been claimed.</p></div></div></div>
+  <div class="wrap">
+    <div class="tools"><div class="srch"><svg><use href="#i-search"/></svg><label class="sr" for="xq">Search coins</label><input class="inp" id="xq" placeholder="Search name, $symbol or recipient"></div>
+      <div class="pills" id="xSort"><button type="button" aria-pressed="true" data-s="new">Newest</button><button type="button" aria-pressed="false" data-s="fees">Most fees</button><button type="button" aria-pressed="false" data-s="old">Oldest</button></div>
+      <div class="pills" id="xStat"><button type="button" aria-pressed="true" data-f="any">Any</button><button type="button" aria-pressed="false" data-f="paying">Paying out</button><button type="button" aria-pressed="false" data-f="claimed">Claimed</button><button type="button" aria-pressed="false" data-f="unclaimed">Unclaimed</button></div></div>
+    <div data-coinlist="all"></div>
+  </div>
+</div>
+
+<!-- ================= COIN ================= -->
+<div data-view="coin" hidden>
+  <div class="ph" style="--pc:rgba(58,155,255,.22)"><div class="wrap in"><div><span class="eyebrow" style="color:var(--sky)">The house coin</span><h1>$STUBS <span class="muted" style="font-size:.42em;letter-spacing:0">/ SOL</span></h1><p><span class="mono" id="cMint">CA posted on X at launch</span> · pump.fun · 1B supply · creator fee 0.30% on the curve</p></div><div class="cta"><a class="btn pri" id="cTrade" href="https://pump.fun" target="_blank" rel="noopener">Trade on pump.fun ↗</a><a class="btn sm" id="cScan" href="https://solscan.io" target="_blank" rel="noopener">Solscan ↗</a></div></div></div>
+  <div class="wrap">
+    <div class="statg">
+      <div class="card stat"><span class="i" style="--c:#FF3D7F"><svg><use href="#i-chart"/></svg></span><span>Market cap</span><b>—</b><small>live once trading</small></div>
+      <div class="card stat"><span class="i" style="--c:#FF7A2E"><svg><use href="#i-vault"/></svg></span><span>Unswept fees</span><b>—</b><small>collected at ≥ 0.005 SOL</small></div>
+      <div class="card stat"><span class="i" style="--c:#6E55FF"><svg><use href="#i-sweep"/></svg></span><span>Swept to date</span><b>$0.00</b><small>0 sweeps</small></div>
+      <div class="card stat"><span class="i" style="--c:#00C244"><svg><use href="#i-check"/></svg></span><span>Deposited</span><b>$0.00</b><small>awaiting launch</small></div>
+    </div>
+    <div class="cg">
+      <div class="card pad"><div class="chead"><b>KEEPER ACTIVITY</b><span class="chip">Swept → USDC → Sending → Deposited</span></div><div class="empty"><svg class="art" viewBox="0 0 150 90" aria-hidden="true"><path d="M18 20h114v14a6 6 0 0 0 0 12v30H18V46a6 6 0 0 0 0-12z" fill="#fff" stroke="#E7D6BE" stroke-width="2"/><path d="M100 24v48" stroke="#E7D6BE" stroke-width="2" stroke-dasharray="3 3"/><rect x="28" y="36" width="50" height="8" rx="4" fill="#FFB3D1"/><rect x="28" y="52" width="36" height="6" rx="3" fill="#E7D6BE"/></svg><b>No sweeps yet</b><p>Each sweep will show here with its SOL amount, the USDC received and links to both transactions once $STUBS is trading.</p></div></div>
+      <div class="card pad" style="background:linear-gradient(170deg,#fff 40%,#EAFBF0)"><div class="chead"><b>FEE ROUTING</b><span class="chip">Pre-launch</span></div><div class="acct" style="background:linear-gradient(135deg,#2BD36B,#00C244)"><small>CASH APP</small><b>Stubs treasury</b><div class="r"><span>Receives the creator fee</span><span>USD</span></div></div><div class="kv" style="margin-top:14px"><div><span>Quoted in</span><b>SOL</b></div><div><span>Creator fee</span><b>0.30% curve · 0.05–0.95% PumpSwap</b></div><div><span>Fee vault</span><b class="mono">at launch</b></div><div><span>Settlement</span><b>USDC → Cash App</b></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= LAUNCH ================= -->
+<div data-view="launch" hidden>
+  <div class="ph"><div class="wrap in"><div><span class="eyebrow">pump.fun · Solana mainnet</span><h1>Print a <span class="grad">new stub.</span></h1><p>Mint on pump.fun in one signature and choose who gets its creator fees.</p></div></div></div>
+  <div class="wrap lg">
+    <div style="display:grid;gap:22px;min-width:0">
+      <div class="card fs"><div class="t" style="--c:#FF3D7F"><span class="n">01</span><div><h3>Token</h3><p>What traders see on pump.fun, explorers and wallets. The image and details are pinned to IPFS and can't be edited after launch.</p></div></div>
+        <div class="upl"><label for="lImg" id="lImgL"><span>＋<br>Upload image</span></label><input id="lImg" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="sr"><span class="muted" style="font-size:14px">PNG, JPG, WebP or GIF · up to 5 MB<br>Square, 512 × 512 looks best everywhere</span></div>
+        <div class="two"><div class="f"><label for="lName">Name</label><input class="inp" id="lName" maxlength="32" placeholder="Grandma's Garden"><span class="cnt" id="cName">0/32</span></div><div class="f"><label for="lSym">Symbol</label><input class="inp" id="lSym" maxlength="10" placeholder="GRAN"><span class="cnt" id="cSym">0/10</span></div></div>
+        <div class="f"><label for="lDesc">Description <span class="opt">OPTIONAL</span></label><textarea class="inp" id="lDesc" maxlength="500" placeholder="What's this coin about?"></textarea><span class="cnt" id="cDesc">0/500</span></div>
+      </div>
+      <div class="card fs"><div class="t" style="--c:#10BFAE"><span class="n">02</span><div><h3>Fee recipient</h3><p>Every trade pays pump.fun's creator fee into this coin's own vault. Pick the app and enter the person, exactly like paying someone.</p></div></div>
+        <div class="seg" id="lApp" style="justify-self:start"><button type="button" class="v" aria-pressed="true" data-a="venmo">Venmo</button><button type="button" class="c" aria-pressed="false" data-a="cash">Cash App</button></div>
+        <div class="f"><label for="lWho" id="lWhoL">Their Venmo</label><input class="inp" id="lWho" placeholder="@username or phone number"></div>
+        <div class="norm" id="lNorm"></div>
+        <div class="note"><span>💡</span><span>It can be you, a friend, or a creator you want to support. A phone number lets them claim with a text. A username works if that's all you know.</span></div>
+      </div>
+      <div class="card fs"><div class="t" style="--c:#FF7A2E"><span class="n">03</span><div><h3>Links <span class="opt">OPTIONAL</span></h3><p>Shown on the coin page and included in the on-chain details.</p></div></div>
+        <div class="two" style="grid-template-columns:1fr 1fr"><div class="f"><label for="lX">X / Twitter</label><input class="inp" id="lX" placeholder="https://x.com/…"></div><div class="f"><label for="lWeb">Website</label><input class="inp" id="lWeb" placeholder="https://…"></div></div>
+      </div>
+      <div class="card fs"><div class="t" style="--c:#6E55FF"><span class="n">04</span><div><h3>Initial buy <span class="opt">OPTIONAL</span></h3><p>Buys from the fresh curve in the same transaction, so you hold supply before anyone else can.</p></div></div>
+        <div class="f"><label for="lBuy">Amount in SOL (up to 50)</label><input class="inp" id="lBuy" type="number" min="0" max="50" step="0.1" placeholder="0.0"></div>
+      </div>
+    </div>
+    <div class="sum">
+      <div id="lTicket" style="padding:14px 4px 6px"></div>
+      <div class="card pad"><div class="chead"><b>LAUNCH SUMMARY</b></div><div class="kv" id="lSum"></div>
+        <div class="errbox" id="lErr" hidden style="margin-top:12px"></div>
+        <button class="btn pri" id="lGo" type="button" style="width:100%;margin-top:16px">Connect wallet</button>
+        <p class="muted" style="text-align:center;font-size:13.5px;margin:12px 0 0">One signature. The mint is permanent.</p></div>
+      <div class="card pad"><div class="chead"><b>AFTER LAUNCH</b></div><div class="after"><div>The coin is live on pump.fun and on its Stubs page.</div><div>Every trade pays the creator fee into the coin's vault. The keeper sweeps it and swaps it to USDC.</div><div>The recipient claims once. Every sweep after that lands in their Venmo or Cash App in USD.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CLAIM ================= -->
+<div data-view="claim" hidden>
+  <div class="ph" style="--pc:rgba(0,194,68,.2)"><div class="wrap in"><div><span class="eyebrow" style="color:var(--cash)">Claim fees</span><h1>Someone printed<br>you <span class="grad">a stub.</span></h1><p>A coin was launched with its creator fees pointed at your phone number. Verify it, pick Venmo or Cash App, and every sweep lands there in USD.</p></div></div></div>
+  <div class="wrap lg">
+    <div class="card fs" style="min-width:0;padding:32px"><div class="stepper" id="cStep"></div><div id="cBody" style="display:grid;gap:16px"></div></div>
+    <div class="sum">
+      <div class="card pad" style="background:linear-gradient(160deg,#FFE9A8,#FFC93C)"><h3 style="font-size:24px">No crypto needed</h3><p style="margin:8px 0 0;color:#5A4300;font-size:15.5px">You don't need a wallet or a new account. Just the phone number the coin was launched for and the Venmo or Cash App you already use.</p></div>
+      <div class="card pad"><div class="chead"><b>YOUR DASHBOARD SHOWS</b></div><div class="kv"><div><span>Linked account</span><b>Venmo or Cash App</b></div><div><span>Total deposited</span><b>in USD</b></div><div><span>In flight</span><b>sweeps on their way</b></div><div><span>Every payout</span><b>with its stage</b></div></div></div>
+      <div class="card pad"><div class="chead"><b>PRIVACY</b></div><p class="muted" style="margin:0;font-size:14.5px">Public pages only ever show your number masked, like <span class="mono">+1 ••• ••• 0123</span>. We never share it.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PAYOUTS ================= -->
+<div data-view="payouts" hidden>
+  <div class="ph" style="--pc:rgba(255,122,46,.22)"><div class="wrap in"><div><span class="eyebrow" style="color:var(--orange)">Public ledger</span><h1>Payouts</h1><p>Every fee sweep and who it went to. Recipients are always masked.</p></div><a class="btn teal" href="#claim">Claim fees</a></div></div>
+  <div class="wrap"><div class="tblw"><table class="t"><thead><tr><th>Coin</th><th>Recipient</th><th>Swept</th><th>USD</th><th>Status</th></tr></thead><tbody id="pBody"></tbody></table></div></div>
+</div>
+
+<!-- ================= ANALYTICS ================= -->
+<div data-view="analytics" hidden>
+  <div class="ph" style="--pc:rgba(110,85,255,.22)"><div class="wrap in"><div><span class="eyebrow" style="color:var(--grape)">Analytics</span><h1>Box office <span class="grad">numbers.</span></h1><p>Platform-wide creator fees, from real sweeps only.</p></div><div class="seg" id="aRange"><button type="button" class="x" aria-pressed="false" data-r="1">1D</button><button type="button" class="x" aria-pressed="false" data-r="7">7D</button><button type="button" class="x" aria-pressed="true" data-r="30">30D</button></div></div></div>
+  <div class="wrap">
+    <div class="statg">
+      <div class="card stat"><span class="i" style="--c:#FF3D7F"><svg><use href="#i-coin"/></svg></span><span>Fees swept</span><b id="aFees">$0</b><small id="aFeesS">0 SOL</small></div>
+      <div class="card stat"><span class="i" style="--c:#FF7A2E"><svg><use href="#i-send"/></svg></span><span>Payouts</span><b id="aPay">0</b><small id="aPayS">0 deposited</small></div>
+      <div class="card stat"><span class="i" style="--c:#10BFAE"><svg><use href="#i-ticket"/></svg></span><span>Live coins</span><b id="aCoins">0</b><small>launched via Stubs</small></div>
+      <div class="card stat"><span class="i" style="--c:#6E55FF"><svg><use href="#i-users"/></svg></span><span>Accounts linked</span><b id="aLinked">0</b><small>Venmo + Cash App</small></div>
+    </div>
+    <div class="card pad chart"><div class="chead"><b>DAILY FEES · USD</b><span class="chip" id="aSol">SOL price —</span></div><div id="aChart"></div></div>
+  </div>
+</div>
+
+<!-- ================= STUB MAKER ================= -->
+<div data-view="maker" hidden>
+  <div class="ph" style="--pc:rgba(255,201,60,.3)"><div class="wrap in"><div><span class="eyebrow" style="color:#C98A00">New · Stub Maker</span><h1>Hand them <span class="grad">the stub.</span></h1><p>Stubs never contacts recipients for you. Make a ticket card and a ready-to-send message so they know dollars are waiting.</p></div></div></div>
+  <div class="wrap lg">
+    <div class="card fs" style="min-width:0">
+      <div class="two"><div class="f"><label for="mCoin">Coin name</label><input class="inp" id="mCoin" maxlength="32" value="Grandma's Garden"></div><div class="f"><label for="mSym">Symbol</label><input class="inp" id="mSym" maxlength="10" value="GRAN"></div></div>
+      <div class="two" style="grid-template-columns:1fr 1fr"><div class="f"><label for="mName">Their first name</label><input class="inp" id="mName" maxlength="24" value="Grandma"></div><div class="f"><label for="mFrom">From</label><input class="inp" id="mFrom" maxlength="24" value="Sam"></div></div>
+      <div class="f"><span class="lab">Ticket color</span><div style="display:flex;gap:10px;flex-wrap:wrap" id="mColors"></div></div>
+      <div class="f"><label for="mMsg">Message to send</label><textarea class="inp" id="mMsg" style="min-height:150px"></textarea></div>
+      <div class="cta"><button class="btn sun" id="mCopy" type="button">Copy message</button><button class="btn pri" id="mSave" type="button">Download ticket PNG</button></div>
+    </div>
+    <div class="sum"><canvas id="mCv" width="1000" height="460" style="width:100%;height:auto;filter:drop-shadow(0 20px 26px rgba(26,20,51,.28))" aria-label="Ticket card preview"></canvas><p class="muted" style="font-size:14px;margin:0">Text them the image and message. They claim at <b id="mLink" style="color:var(--ink);overflow-wrap:anywhere"></b></p></div>
+  </div>
+</div>
+
+<!-- ================= DOCS ================= -->
+<div data-view="docs" hidden>
+  <div class="ph" style="--pc:rgba(26,20,51,.12)"><div class="wrap in"><div><span class="eyebrow">Documentation</span><h1>Stubs, <span class="grad">explained.</span></h1><p>Launching a coin on pump.fun through Stubs, how its creator fees are tracked, swept and priced, and how the recipient claims them.</p></div></div></div>
+  <div class="wrap docs">
+    <nav aria-label="Docs"><b>START</b><a href="#docs" data-j="d1">Overview</a><a href="#docs" data-j="d2">Launch in two minutes</a><b>FEES</b><a href="#docs" data-j="d3">Recipients</a><a href="#docs" data-j="d4">Claiming</a><a href="#docs" data-j="d5">Fee mechanics</a><a href="#docs" data-j="d6">Sweeps &amp; payouts</a><b>TRUST</b><a href="#docs" data-j="d7">Security &amp; privacy</a><a href="#docs" data-j="d8">Limits &amp; regions</a><b>REFERENCE</b><a href="#docs" data-j="d9">Public API</a></nav>
+    <article>
+      <div class="card" id="d1"><h2>Overview</h2><p>Stubs is a launchpad for pump.fun coins with one change to the money flow: the creator fee a coin earns on every trade is paid in US dollars to the Venmo or Cash App of whoever the launcher names, identified by phone number or username.</p><ul><li><b>Launcher</b>: connects a Solana wallet, fills in the coin, signs one transaction and pays the network fee. Never touches the fees.</li><li><b>Recipient</b>: the person named at launch. Claims once, then gets paid automatically.</li><li><b>Keeper</b>: the scheduled job that collects fees from each coin's vault, swaps them to USDC and deposits dollars.</li></ul></div>
+      <div class="card" id="d2"><h2>Launch in two minutes</h2><ol style="color:var(--ink2)"><li>Open Launch and connect a Solana wallet with enough SOL for Solana network and account rent (about 0.02 SOL) plus any initial buy. pump.fun charges nothing to create a coin.</li><li>Upload a square image and enter a name (up to 32 characters) and symbol (up to 10).</li><li>Under Fee recipient, pick Venmo or Cash App and enter the person's username or phone number.</li><li>Add links and an initial buy if you like. The buy runs in the same transaction as the mint.</li><li>Press Launch. Your wallet asks for one signature, and you land on the coin page when it confirms.</li></ol><div class="note"><span>🎟️</span><span>Tell the recipient to visit Claim fees. The Stub Maker makes a card and message for exactly that.</span></div></div>
+      <div class="card" id="d3"><h2>Recipients</h2><p>A recipient is an identity, not an account. What you type is normalized, so the same person typed two ways resolves to one recipient. Try it:</p><div class="f" style="margin:12px 0"><label for="nIn">You type</label><input class="inp" id="nIn" value="(415) 555-0123"></div><div class="norm" id="nOut"></div><table><thead><tr><th>You type</th><th>Stored as</th></tr></thead><tbody><tr><td>(415) 555-0123</td><td class="mono">phone:+14155550123</td></tr><tr><td>+44 7700 900123</td><td class="mono">phone:+447700900123</td></tr><tr><td>@Maya-Chen (Venmo)</td><td class="mono">venmo:@Maya-Chen</td></tr><tr><td>nova (Cash App)</td><td class="mono">cashapp:$nova</td></tr></tbody></table><div class="note warn" style="margin-top:16px"><span>⚠️</span><span>The recipient is written into the coin at mint time and can't be changed. Fees pointed at a typo can't be claimed.</span></div></div>
+      <div class="card" id="d4"><h2>Claiming</h2><ol style="color:var(--ink2)"><li><b>Identify</b>: enter your phone number, or link the username the launcher used.</li><li><b>Verify</b>: enter the 6-digit code we text you. Codes expire after a few minutes.</li><li><b>Pick where it goes</b>: a Venmo @username or Cash App $cashtag. You can switch later.</li></ol><p>Sweeps that arrive before you link an account wait as "Awaiting payout method" and are released when you link one.</p></div>
+      <div class="card" id="d5"><h2>Fee mechanics</h2><p>pump.fun sets the fee schedule, not Stubs.</p><table><thead><tr><th>Leg</th><th>Rate</th><th>Goes to</th></tr></thead><tbody><tr><td>Coin creation</td><td>0 SOL (network fee only)</td><td>Solana</td></tr><tr><td>Bonding curve, total</td><td>1.25% of every buy and sell</td><td>split below</td></tr><tr><td>· Protocol</td><td>0.95%</td><td>pump.fun</td></tr><tr><td>· Creator</td><td>0.30%</td><td>This coin's vault → recipient</td></tr><tr><td>Graduation</td><td>Curve completes at ~85 SOL, one-off 0.015 SOL migration fee</td><td>Moves to a PumpSwap canonical pool</td></tr><tr><td>PumpSwap creator fee</td><td>Dynamic by market cap: 0.30% at launch tier, up to 0.95%, down to 0.05% at the top tier</td><td>Companion vault → recipient</td></tr></tbody></table><p style="margin-top:12px">Every coin is a standard pump.fun token: 1,000,000,000 supply, 6 decimals, mint and freeze authority revoked at creation, no presale and no team allocation unless the launcher makes an initial buy.</p><p style="margin-top:12px">Fees continue after graduation. Once the coin moves to PumpSwap, swaps there pay the creator fee into a companion vault for the same key, and the keeper sweeps both. Stubs takes nothing from the creator fee.</p></div>
+      <div class="card" id="d6"><h2>Sweeps &amp; payouts</h2><p>The keeper runs on a schedule. For each live coin it re-derives the creator key, reads the vault, skips balances under 0.005 SOL, collects the fees, swaps them to USDC on Jupiter and records a payout. If the recipient has linked an account, it's sent right away. Every sweep and swap is a public Solana transaction.</p><table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody><tr><td>Swept</td><td>Fees collected on-chain</td></tr><tr><td>Converted to USDC</td><td>Swapped on Jupiter, dollar value fixed</td></tr><tr><td>Awaiting payout method</td><td>Recipient hasn't linked an account yet</td></tr><tr><td>Sending</td><td>Dollars on their way</td></tr><tr><td>Deposited</td><td>In their Venmo or Cash App</td></tr><tr><td>Failed</td><td>Rejected, shown with the reason. Relink to retry</td></tr></tbody></table></div>
+      <div class="card" id="d7"><h2>Security &amp; privacy</h2><p>Only someone who completes a texted code for the exact number the launcher entered can claim. Public pages show recipients masked, like <span class="mono">+1 ••• ••• 0123</span>, and the raw contact never leaves the server. Launch transactions are built server-side and checked before broadcast, so a client can't swap in a different transaction.</p></div>
+      <div class="card" id="d8"><h2>Limits &amp; regions</h2><table><tbody><tr><td>Name / symbol</td><td>32 / 10 characters</td></tr><tr><td>Image</td><td>PNG, JPEG, WebP or GIF, up to 5 MB</td></tr><tr><td>Initial buy</td><td>Up to 50 SOL</td></tr><tr><td>Minimum sweep</td><td>0.005 SOL per vault</td></tr><tr><td>Payout methods</td><td>Venmo or Cash App, US accounts</td></tr></tbody></table></div>
+      <div class="card" id="d9"><h2>Public API</h2><p>Read-only endpoints. Contacts are always masked.</p><pre>GET  /api/coins            live coins, newest first
+GET  /api/coins/:mint      one coin with fees and claim status
+GET  /api/payouts          sweep ledger, masked recipients
+GET  /api/analytics        daily fee series and totals
+POST /api/launch           build a create (+ buy) transaction
+POST /api/claim/start      { phone }        texts a code
+POST /api/claim/verify     { phone, code }  returns a session token
+POST /api/payout-method    bearer · links Venmo or Cash App</pre><p>Set <span class="mono">CONFIG.API</span> at the top of the page script to your keeper backend and every page reads live from it.</p></div>
+    </article>
+  </div>
+</div>
+</main>
+
+<footer><div class="wrap">
+  <div class="ft">
+    <div style="display:grid;gap:14px;align-content:start"><a class="logo" href="#home" style="color:#fff"><svg viewBox="0 0 44 32" aria-hidden="true"><path d="M2 5h40v8a3 3 0 0 0 0 6v8H2v-8a3 3 0 0 0 0-6z" fill="url(#lgS)"/><path d="M31 7v18" stroke="#1B1435" stroke-width="2" stroke-dasharray="2.5 2.5"/><path d="M8 12h15M8 17h10" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="36.5" cy="16" r="2.6" fill="#FFC93C"/></svg>Stubs</a><p style="margin:0;color:rgba(255,255,255,.7);max-width:34ch">Creator fees to Venmo or Cash App. Built on pump.fun. Not an investment product.</p><a class="ib" id="xF" href="https://x.com/UseStubs" target="_blank" rel="noopener" aria-label="Stubs on X" style="background:rgba(255,255,255,.1);box-shadow:none;color:#fff"><svg><use href="#i-x"/></svg></a></div>
+    <div><h4>PRODUCT</h4><a class="l" href="#launch">Launch</a><a class="l" href="#explore">Explore</a><a class="l" href="#maker">Stub Maker</a></div>
+    <div><h4>MONEY</h4><a class="l" href="#claim">Claim fees</a><a class="l" href="#payouts">Payouts</a><a class="l" href="#analytics">Analytics</a></div>
+    <div><h4>MORE</h4><a class="l" href="#coin">$STUBS</a><a class="l" href="#docs">Docs</a><a class="l" id="xF2" href="https://x.com/UseStubs" target="_blank" rel="noopener">X ↗</a></div>
+  </div>
+  <div class="mark" aria-hidden="true">STUBS</div>
+</div></footer>
+
+<nav class="mnav" aria-label="Mobile"><a href="#home" data-nav="home"><svg><use href="#i-home"/></svg>Home</a><a href="#explore" data-nav="explore"><svg><use href="#i-search"/></svg>Explore</a><a href="#launch" data-nav="launch"><svg><use href="#i-rocket"/></svg>Launch</a><a href="#claim" data-nav="claim"><svg><use href="#i-ticket"/></svg>Claim</a><a href="#payouts" data-nav="payouts"><svg><use href="#i-send"/></svg>Payouts</a></nav>
+<canvas id="boom" aria-hidden="true"></canvas>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+/* ============ CONFIG: edit before deploying ============ */
+const CONFIG={
+  X_URL:"https://x.com/UseStubs",     // your Stubs X link
+  CA:"",                      // $STUBS mint (pump.fun), "" until launch
+  API:"",                     // your keeper backend, e.g. "https://api.yourstubs.com" ("" = no live data yet)
+  RPC:"https://api.mainnet-beta.solana.com"
+};
+/* ======================================================= */
+document.documentElement.classList.add("js");
+const $=id=>document.getElementById(id),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem("stubs_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("stubs_"+k,JSON.stringify(v))}catch(e){}}};
+let tt;function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3300)}
+async function copy(t,l){try{await navigator.clipboard.writeText(t);toast(l+" copied")}catch(e){toast("Copy is blocked here. Select the text and copy it.")}}
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const short=a=>a.slice(0,4)+"…"+a.slice(-4);
+const usd=v=>"$"+(v>=1e6?(v/1e6).toFixed(2)+"M":v>=1e4?(v/1e3).toFixed(1)+"K":v.toLocaleString(undefined,{minimumFractionDigits:v<100&&v%1?2:0,maximumFractionDigits:2}));
+async function api(p,opt){if(!CONFIG.API)throw new Error("no api");const r=await fetch(CONFIG.API.replace(/\/$/,"")+p,opt);if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||"Request failed ("+r.status+")");return r.json()}
+
+/* ---------- ticket component ---------- */
+function hash(s){let h=2166136261;for(const c of String(s))h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0}
+function barcode(seed,col="#1A1433"){let r=hash(seed),x=0,o="";while(x<56){r=Math.imul(r,1103515245)+12345>>>0;const w=1+(r%3);if((r>>8)%3)o+=`<rect x="${x}" y="0" width="${w}" height="30" fill="${col}"/>`;x+=w+1}return `<svg class="bc" viewBox="0 0 56 30" preserveAspectRatio="none" aria-hidden="true">${o}</svg>`}
+function ticket(o){const c=o.color||"#FF3D7F",serial=o.serial||("Nº "+String(hash(o.sym||"x")%900000+100000));
+  return `<div class="tkt ${o.small?"sm":""} ${o.stamp?"has-st":""}" style="--tc:${c}"><div class="body"><div class="band"><span class="t">${esc(o.top||(o.small?"ADMIT ONE":"ADMIT ONE · CREATOR FEES"))}</span><span class="n">${esc(serial)}</span></div><div class="foil"></div><div class="gu"></div>
+   <div class="mid"><div class="who"><span class="av">${o.img?`<img src="${o.img}" alt="">`:esc((o.sym||"S")[0])}</span><div style="min-width:0"><h3>$${esc(o.sym||"SYMBOL")}</h3><div class="sub">${esc(o.name||"Coin name")}</div></div></div>
+   <div class="grid"><div><span>FEES TO</span><b>${esc(o.to||"—")}</b></div><div><span>PAID IN</span><b>${esc(o.paid||"USD")}</b></div>${o.extra?o.extra.map(e=>`<div><span>${esc(e[0])}</span><b>${esc(e[1])}</b></div>`).join(""):""}</div></div>${o.stamp?`<span class="stamp">${esc(o.stamp)}</span>`:""}</div>
+   <div class="stubp"><span class="no">${esc(serial.replace("Nº ",""))}</span><span class="adm">${esc(o.side||"ADMIT ONE")}</span>${barcode(o.sym||"x")}</div></div>`}
+
+/* wiring */
+["xTop","xF","xF2","tokX","xDr"].forEach(i=>$(i).href=CONFIG.X_URL);
+if(CONFIG.CA){$("cMint").textContent=short(CONFIG.CA);$("cTrade").href="https://pump.fun/coin/"+CONFIG.CA;$("cScan").href="https://solscan.io/token/"+CONFIG.CA;$("tokX").innerHTML="Trade on pump.fun ↗";$("tokX").href="https://pump.fun/coin/"+CONFIG.CA}
+(()=>{const it=[["#FF3D7F","Creator fees → Venmo · Cash App"],["#FFC93C","Launch on pump.fun in one signature"],["#10BFAE","Claim with a texted code"],["#6E55FF","No wallet needed to get paid"],["#FF7A2E","Every coin gets its own vault"],["#00C244","Stubs takes 0% of creator fees"],["#3A9BFF","$STUBS · CA drops on X"]];const h=it.map(a=>`<span><i style="background:${a[0]}"></i>${a[1]}</span>`).join("");$("ann").innerHTML=h+h})();
+$("burger").onclick=()=>$("drawer").hidden=false;$("drX").onclick=()=>$("drawer").hidden=true;$("drawer").addEventListener("click",e=>{if(e.target===$("drawer")||e.target.closest("a"))$("drawer").hidden=true});
+
+/* ---------- hero scene ---------- */
+const EX=[{sym:"GRAN",name:"Grandma's Garden",to:"@grandma-rose",paid:"USD · Venmo",color:"#FF3D7F",side:"ADMIT ONE",lcd:"$GRAN → VENMO"},{sym:"MAYA",name:"Maya's Studio",to:"@maya-chen",paid:"USD · Venmo",color:"#3D95CE",side:"FEES → USD",lcd:"$MAYA → VENMO"},{sym:"NOVA",name:"Nova Radio",to:"$nova",paid:"USD · Cash App",color:"#00C244",side:"GOOD FOR $",lcd:"$NOVA → CASH APP"}];
+$("pslot").innerHTML=EX.map(e=>`<div class="pt">${ticket({...e,small:true,stamp:"EXAMPLE"})}</div>`).join("");
+let lcdI=0;setInterval(()=>{lcdI=(lcdI+1)%3;const l=$("lcd");if(l)l.textContent=EX[lcdI].lcd},3000);
+(()=>{const cols=["#FF3D7F","#FF7A2E","#FFC93C","#10BFAE","#6E55FF","#3A9BFF","#9BDB3C"];let h="";for(let i=0;i<26;i++){const s=6+Math.random()*10;h+=`<i style="left:${4+Math.random()*92}%;top:${Math.random()*96}%;width:${s}px;height:${s*.55}px;background:${cols[i%7]};animation-duration:${7+Math.random()*9}s;opacity:${.5+Math.random()*.5}"></i>`}$("burst").innerHTML=h})();
+(function clock(){const d=new Date();$("clk").textContent=d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}).replace(/\s?[AP]M/i,"");setTimeout(clock,30000)})();
+$("bigTk").innerHTML=ticket({sym:"STUBS",name:"The house coin · pump.fun",to:"Stubs treasury",paid:"USD · Cash App",color:"#FF3D7F",side:"FAIR LAUNCH",top:"ADMIT ALL · PUMP.FUN",serial:"Nº 000001",extra:[["SUPPLY","1,000,000,000"],["TEAM","0%"]],stamp:"SOON"});
+(()=>{const b=$("bigTk");b.querySelector(".band").style.background="linear-gradient(90deg,#FF3D7F,#FF7A2E,#FFC93C)";b.querySelector(".av").style.background="linear-gradient(135deg,#FF3D7F,#FFC93C)"})();
+
+/* confetti burst */
+function boom(){if(reduce)return;const c=$("boom"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cols=["#FF3D7F","#FF7A2E","#FFC93C","#10BFAE","#6E55FF","#9BDB3C","#3A9BFF"];const P=Array.from({length:180},()=>({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*20,vy:-Math.random()*17-4,r:Math.random()*10+6,c:cols[Math.random()*7|0],a:Math.random()*6,s:Math.random()*.3+.1}));let f=0;(function d(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.45;p.vx*=.99;p.a+=p.s;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(++f<160)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
+
+/* recipient normalizer */
+function normalize(app,raw){const s=(raw||"").trim();if(!s)return null;const digits=s.replace(/[^\d+]/g,"");
+  if(/^\+?[\d\s().-]{7,}$/.test(s)){let d=digits.replace(/(?!^)\+/g,"");if(!d.startsWith("+"))d=(d.length===10?"+1":"+")+d;return {kind:"phone",id:"phone:"+d,mask:d.slice(0,2)+" ••• ••• "+d.slice(-4)}}
+  if(app==="cash"){const t=s.replace(/^\$/,"");if(!/^[A-Za-z][A-Za-z0-9_-]{0,19}$/.test(t))return {err:"Cash App $cashtags start with a letter and run up to 20 characters."};return {kind:"cashapp",id:"cashapp:$"+t,mask:"$"+t}}
+  const t=s.replace(/^@/,"");if(!/^[A-Za-z0-9_-]{5,30}$/.test(t))return {err:"Venmo usernames are 5 to 30 letters, numbers, hyphens or underscores."};return {kind:"venmo",id:"venmo:@"+t,mask:"@"+t}}
+function normHTML(n){return n?n.err?`<span style="color:#B0124A;font-weight:600">${esc(n.err)}</span>`:`<span class="muted" style="font-weight:600">Stored as</span><code>${esc(n.id)}</code>`:`<span class="muted" style="font-weight:600">Stored as</span><code>—</code>`}
+$("nIn").addEventListener("input",()=>$("nOut").innerHTML=normHTML(normalize("venmo",$("nIn").value)));$("nOut").innerHTML=normHTML(normalize("venmo",$("nIn").value));
+
+/* home interactions */
+$$("#homeSeg button").forEach(b=>b.onclick=()=>{$$("#homeSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b));const v=b.dataset.a==="venmo";$("homeAcct").style.background=v?"linear-gradient(135deg,#4FA6DE,#3D95CE)":"linear-gradient(135deg,#2BD36B,#00C244)";$("homeApp").textContent=v?"VENMO":"CASH APP";$("homeHandle").textContent=v?"@maya-chen":"$nova"});
+function est(){const v=Math.round(Math.pow(10,$("eVol").value/100*3.3)*500/100)*100,day=v*.003,dd=+$("eDays").value;$("eVolT").textContent=usd(v);$("eDaysT").textContent=dd;$("eTotD").textContent=dd;$("eDay").textContent=usd(day);$("eTot").textContent=usd(day*dd);
+  const W=300,H=70,n=24,pts=Array.from({length:n},(_,i)=>[i/(n-1)*W,H-6-(i/(n-1))*(H-16)]),d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+  $("eSpark").innerHTML=`<defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF3D7F"/><stop offset="1" stop-color="#FFC93C"/></linearGradient><linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF3D7F" stop-opacity=".25"/><stop offset="1" stop-color="#FF3D7F" stop-opacity="0"/></linearGradient></defs><path d="${d} L${W} ${H} L0 ${H}Z" fill="url(#sf)"/><path d="${d}" fill="none" stroke="url(#sg)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`}
+["eVol","eDays"].forEach(i=>$(i).addEventListener("input",est));est();
+$("miniTk").innerHTML=ticket({sym:"GRAN",name:"Grandma's Garden",to:"Grandma",paid:"USD",color:"#6E55FF",small:true,side:"FOR YOU",stamp:"PAID"});
+let lifeI=0;function life(){const L=$$("#life .stage");L.forEach((d,i)=>d.classList.toggle("on",i===lifeI));lifeI=(lifeI+1)%L.length}life();setInterval(life,1700);
+/* reveal on scroll (content is visible at rest; only enhances) */
+if("IntersectionObserver" in window&&!reduce){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("pre");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"});$$(".reveal").forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add("pre");io.observe(el)}})}
+
+/* ---------- coins / payouts / analytics (live API only) ---------- */
+let COINS=null;async function loadCoins(){if(COINS)return COINS;try{const j=await api("/api/coins");COINS=Array.isArray(j)?j:(j.coins||[])}catch(e){COINS=[]}return COINS}
+const EMPTY_ART=`<svg class="art" viewBox="0 0 150 100" aria-hidden="true"><g transform="rotate(-8 75 50)"><path d="M14 22h122v16a7 7 0 0 0 0 14v26H14V52a7 7 0 0 0 0-14z" fill="#fff" stroke="#E7D6BE" stroke-width="2.5"/><rect x="15" y="23" width="120" height="14" fill="#FFB3D1"/><path d="M104 40v38" stroke="#E7D6BE" stroke-width="2.5" stroke-dasharray="3 3"/><rect x="26" y="48" width="56" height="9" rx="4" fill="#FCEBD5"/><rect x="26" y="62" width="38" height="7" rx="3" fill="#FCEBD5"/></g></svg>`;
+async function renderCoins(){const list=await loadCoins();const cols=["#FF3D7F","#10BFAE","#FF7A2E","#6E55FF","#3A9BFF","#00C244"];
+  for(const el of $$("[data-coinlist]")){if(el.closest("[hidden]"))continue;let L=[...list];
+    if(el.dataset.coinlist==="all"){const q=$("xq").value.trim().toLowerCase(),s=document.querySelector("#xSort [aria-pressed=true]").dataset.s,f=document.querySelector("#xStat [aria-pressed=true]").dataset.f;if(q)L=L.filter(c=>[c.name,c.symbol,c.recipient].join(" ").toLowerCase().includes(q));if(f!=="any")L=L.filter(c=>(c.status||"unclaimed")===f);if(s==="fees")L.sort((a,b)=>(b.swept_usd||0)-(a.swept_usd||0));if(s==="old")L.reverse()}else L=L.slice(0,+el.dataset.coinlist);
+    el.innerHTML=L.length?`<div class="tgrid">${L.map((c,i)=>`<a href="${c.mint?"https://pump.fun/coin/"+esc(c.mint):"#"}" target="_blank" rel="noopener">${ticket({sym:c.symbol,name:c.name,to:c.recipient,img:c.image,color:cols[i%6],side:(c.status||"unclaimed").toUpperCase(),extra:[["SWEPT",c.swept_sol!=null?(+c.swept_sol).toFixed(3)+" SOL":"—"],["LAUNCHED BY",c.launcher?short(c.launcher):"—"]],serial:c.mint?"Nº "+c.mint.slice(0,6):undefined})}</a>`).join("")}</div>`
+      :`<div class="card empty">${EMPTY_ART}<b>No stubs printed yet</b><p>${CONFIG.API?"No coins match that search or filter.":"Coins appear here the moment they're launched through Stubs. Be the first to print one."}</p><a class="btn pri sm" href="#launch">Launch a coin</a></div>`}}
+$("xq").addEventListener("input",renderCoins);
+["xSort","xStat"].forEach(id=>$$("#"+id+" button").forEach(b=>b.onclick=()=>{$$("#"+id+" button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCoins()}));
+async function renderPayouts(){let rows=[];try{const j=await api("/api/payouts");rows=Array.isArray(j)?j:(j.payouts||[])}catch(e){}
+  const stc={deposited:["#E3F9E9","#0B7A35"],sending:["#DDF7F4","#077A6F"],awaiting:["#FFF1C9","#7A5A00"],failed:["#FFE3EE","#9E1146"]};
+  $("pBody").innerHTML=rows.length?rows.map(r=>{const k=(r.status||"").split(" ")[0].toLowerCase(),c=stc[k]||["#F1ECF8","#41385E"];return `<tr><td><b>Fees · ${esc(r.coin)}</b><br><span class="muted" style="font-size:13px">${esc(r.ago||"")}${r.tx?` · <a href="https://solscan.io/tx/${esc(r.tx)}" target="_blank" rel="noopener" style="text-decoration:underline">tx</a>`:""}</span></td><td class="mono">${esc(r.recipient)}</td><td class="mono">${(+r.sol).toFixed(4)} SOL</td><td><b>${usd(+r.usd||0)}</b></td><td><span class="chip" style="background:${c[0]};color:${c[1]};box-shadow:none">${esc(r.status)}</span></td></tr>`}).join("")
+   :`<tr><td colspan="5" style="padding:0"><div class="empty">${EMPTY_ART}<b>No payouts yet</b><p>Every sweep is listed here with its transaction once coins are trading.</p></div></td></tr>`}
+async function renderAnalytics(){let a=null;try{a=await api("/api/analytics")}catch(e){}
+  if(a){$("aFees").textContent=usd(a.fees_usd||0);$("aFeesS").textContent=(a.fees_sol||0).toFixed(2)+" SOL";$("aPay").textContent=a.payouts||0;$("aPayS").textContent=(a.deposited||0)+" deposited";$("aCoins").textContent=a.coins||0;$("aLinked").textContent=a.linked||0}
+  const series=a&&a.daily?a.daily:Array.from({length:30},()=>({usd:0})),r=+document.querySelector("#aRange [aria-pressed=true]").dataset.r,S=series.slice(-r),W=900,Hh=300,mx=Math.max(1,...S.map(s=>s.usd)),bw=(W-70)/S.length;
+  let grid="";for(let g=0;g<=4;g++){const y=20+g*(Hh-70)/4;grid+=`<line x1="60" y1="${y}" x2="${W-10}" y2="${y}" stroke="rgba(26,20,51,.08)"/><text x="52" y="${y+4}" text-anchor="end" font-size="13" fill="#776E92" font-family="Outfit,sans-serif">${usd(mx*(1-g/4))}</text>`}
+  const base=Hh-50;
+  $("aChart").innerHTML=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Daily fees in USD"><defs><linearGradient id="bgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5A93"/><stop offset="1" stop-color="#FF7A2E"/></linearGradient></defs>${grid}${S.map((s,i)=>{const h=s.usd/mx*(base-20);return `<rect x="${60+i*bw+bw*.18}" y="${base-Math.max(h,3)}" width="${Math.max(3,bw*.64)}" height="${Math.max(h,3)}" rx="${Math.min(6,bw*.3)}" fill="${s.usd?"url(#bgr)":"rgba(26,20,51,.1)"}"/>`}).join("")}<text x="60" y="${Hh-18}" font-size="13" fill="#776E92" font-family="Outfit,sans-serif">${r} day${r>1?"s":""} ago</text><text x="${W-10}" y="${Hh-18}" font-size="13" fill="#776E92" text-anchor="end" font-family="Outfit,sans-serif">today</text>${a?"":`<g><rect x="${W/2-230}" y="${Hh/2-50}" width="460" height="60" rx="30" fill="#fff" stroke="rgba(26,20,51,.12)"/><text x="${W/2}" y="${Hh/2-14}" text-anchor="middle" font-size="18" fill="#41385E" font-family="Outfit,sans-serif" font-weight="700">No fees yet. This fills in from real sweeps.</text></g>`}</svg>`}
+$$("#aRange button").forEach(b=>b.onclick=()=>{$$("#aRange button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderAnalytics()});
+fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd").then(r=>r.json()).then(j=>{if(j.solana)$("aSol").textContent="SOL $"+j.solana.usd}).catch(()=>{});
+
+/* ---------- launch ---------- */
+const L={app:"venmo",img:""};
+function cnt(id,c,max){$(id).addEventListener("input",()=>{$(c).textContent=$(id).value.length+"/"+max;lUI()})}
+cnt("lName","cName",32);cnt("lSym","cSym",10);cnt("lDesc","cDesc",500);
+$("lSym").addEventListener("input",()=>{const v=$("lSym").value.toUpperCase().replace(/[^A-Z0-9]/g,"");if(v!==$("lSym").value)$("lSym").value=v});
+$$("#lApp button").forEach(b=>b.onclick=()=>{$$("#lApp button").forEach(x=>x.setAttribute("aria-pressed",x===b));L.app=b.dataset.a;$("lWhoL").textContent=L.app==="venmo"?"Their Venmo":"Their Cash App";$("lWho").placeholder=L.app==="venmo"?"@username or phone number":"$cashtag or phone number";lUI()});
+["lWho","lBuy","lX","lWeb"].forEach(i=>$(i).addEventListener("input",lUI));
+$("lImg").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;if(f.size>5e6){toast("Pick an image under 5 MB.");return}const r=new FileReader();r.onload=()=>{L.img=r.result;$("lImgL").innerHTML=`<img src="${r.result}" alt="Coin image">`;lUI()};r.readAsDataURL(f)});
+function lUI(){const n=normalize(L.app,$("lWho").value),buy=+$("lBuy").value||0,name=$("lName").value.trim(),sym=$("lSym").value.trim();
+  $("lNorm").innerHTML=normHTML(n);
+  $("lTicket").innerHTML=ticket({sym:sym||"SYMBOL",name:name||"Coin name",to:n&&!n.err?n.mask:"—",paid:"USD · "+(L.app==="venmo"?"Venmo":"Cash App"),img:L.img,color:L.app==="venmo"?"#3D95CE":"#00C244",side:"PREVIEW",extra:[["CHAIN","pump.fun"],["INITIAL BUY",buy?buy+" SOL":"None"]]});
+  $("lSum").innerHTML=`<div><span>Coin</span><b>${esc(name||"—")} · $${esc(sym||"SYMBOL")}</b></div><div><span>Launcher</span><b>${wallet?short(wallet):"Not connected"}</b></div><div><span>Fees to</span><b class="mono" style="font-size:14px">${n&&!n.err?esc(n.id):"—"}</b></div><div><span>Creator fee</span><b>0.30% of every curve trade</b></div><div><span>Initial buy</span><b>${buy?buy+" SOL":"None"}</b></div><div><span>pump.fun creation fee</span><b>0 SOL</b></div><div><span>Network + rent</span><b>≈ 0.02 SOL</b></div><div class="tot"><span>You sign</span><b>${(0.02+buy).toFixed(2)} SOL</b></div>`;
+  $("lGo").textContent=wallet?"Launch coin":"Connect wallet"}
+$("lGo").onclick=async()=>{if(!wallet){await connect();return}const name=$("lName").value.trim(),sym=$("lSym").value.trim(),n=normalize(L.app,$("lWho").value),buy=+$("lBuy").value||0;let err="";
+  if(!name)err="Give the coin a name.";else if(sym.length<2)err="The symbol needs at least 2 characters.";else if(!n||n.err)err=n&&n.err?n.err:"Enter who receives the fees.";else if(buy>50)err="The initial buy is capped at 50 SOL.";
+  $("lErr").hidden=!err;$("lErr").textContent=err;if(err)return;
+  if(!CONFIG.API){store.set("draft",{name,sym,desc:$("lDesc").value,recipient:n.id,buy});toast("Launches open when Stubs goes live. Your coin is saved on this device.");return}
+  try{$("lGo").disabled=true;$("lGo").textContent="Building transaction…";const j=await api("/api/launch",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,symbol:sym,description:$("lDesc").value,image:L.img,recipient:n.id,twitter:$("lX").value,website:$("lWeb").value,buy_sol:buy,launcher:wallet})});
+    if(!window.solanaWeb3)await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s)});
+    const tx=window.solanaWeb3.VersionedTransaction.deserialize(Uint8Array.from(atob(j.transaction),c=>c.charCodeAt(0)));const signed=await prov().signTransaction(tx);
+    const sent=await api("/api/launch/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:j.id,transaction:btoa(String.fromCharCode(...signed.serialize()))})});
+    boom();toast("Live on pump.fun! Opening your coin…");setTimeout(()=>{location.href="https://pump.fun/coin/"+sent.mint},1200)}
+  catch(e){toast("Launch didn't go through: "+(e.message||"cancelled"))}finally{$("lGo").disabled=false;lUI()}};
+
+/* ---------- claim ---------- */
+const C={step:0,phone:"",token:store.get("tok",null)};
+function cUI(){$("cStep").innerHTML=["Phone","Code","Payout"].map((s,i)=>`<span class="${i===C.step?"on":i<C.step?"done":""}"><i>${i<C.step?"✓":i+1}</i>${s}</span>`).join('<span class="ln"></span>');let h="";
+  if(C.step===0)h=`<h3 style="font-size:26px">Your phone number</h3><p class="muted" style="margin:0">The number the coin was launched for. We'll text you a code to confirm it's you.</p><div class="phonein"><select class="inp" id="cCc" aria-label="Country code"><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option><option value="+61">🇦🇺 +61</option><option value="+49">🇩🇪 +49</option><option value="+52">🇲🇽 +52</option></select><label class="sr" for="cPh">Phone number</label><input class="inp" id="cPh" inputmode="tel" placeholder="(415) 555-0123"></div><button class="btn pri" id="cNext" type="button">Text me a code</button><p class="muted" style="font-size:13.5px;margin:0">Standard SMS rates may apply. We never share your number.</p>`;
+  if(C.step===1)h=`<h3 style="font-size:26px">Enter the 6-digit code</h3><p class="muted" style="margin:0">Sent to ${esc(C.phone)}. Codes expire after a few minutes.</p><label class="sr" for="cCode">Code</label><input class="inp" id="cCode" inputmode="numeric" maxlength="6" placeholder="••••••" style="font-family:var(--mono);font-size:28px;letter-spacing:.5em;text-align:center;height:68px"><div class="cta"><button class="btn pri" id="cNext" type="button">Verify</button><button class="btn ghost sm" id="cBack" type="button">Change number</button></div>`;
+  if(C.step===2)h=`<h3 style="font-size:26px">Where should the dollars go?</h3><div class="seg" id="cApp" style="justify-self:start"><button type="button" class="v" aria-pressed="true" data-a="venmo">Venmo</button><button type="button" class="c" aria-pressed="false" data-a="cash">Cash App</button></div><div class="f"><label for="cHandle" id="cHL">Your Venmo @username</label><input class="inp" id="cHandle" placeholder="@your-name"></div><div class="norm" id="cNorm"></div><button class="btn teal" id="cNext" type="button">Link account</button>`;
+  $("cBody").innerHTML=h;bindClaim()}
+function bindClaim(){const nx=$("cNext");if($("cBack"))$("cBack").onclick=()=>{C.step=0;cUI()};
+  if(C.step===0)nx.onclick=async()=>{const d=$("cPh").value.replace(/\D/g,"");if(d.length<6){toast("Enter your full phone number.");return}C.phone=$("cCc").value+d;if(!CONFIG.API){toast("Claims open when Stubs goes live. Check back after launch.");return}try{await api("/api/claim/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:C.phone})});C.step=1;cUI()}catch(e){toast(e.message)}};
+  if(C.step===1)nx.onclick=async()=>{const code=$("cCode").value.trim();if(!/^\d{6}$/.test(code)){toast("The code is 6 digits.");return}try{const j=await api("/api/claim/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:C.phone,code})});C.token=j.token;store.set("tok",j.token);C.step=2;cUI()}catch(e){toast(e.message)}};
+  if(C.step===2){let app="venmo";const upd=()=>$("cNorm").innerHTML=normHTML(normalize(app,$("cHandle").value));$$("#cApp button").forEach(b=>b.onclick=()=>{$$("#cApp button").forEach(x=>x.setAttribute("aria-pressed",x===b));app=b.dataset.a;$("cHL").textContent=app==="venmo"?"Your Venmo @username":"Your Cash App $cashtag";$("cHandle").placeholder=app==="venmo"?"@your-name":"$yourname";upd()});$("cHandle").oninput=upd;upd();
+    nx.onclick=async()=>{const n=normalize(app,$("cHandle").value);if(!n||n.err||n.kind==="phone"){toast(n&&n.err?n.err:"Enter your username.");return}try{await api("/api/payout-method",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+C.token},body:JSON.stringify({method:app,handle:n.mask})});boom();toast("Linked! Every sweep now lands in "+n.mask)}catch(e){toast(e.message)}}}}
+
+/* ---------- stub maker ---------- */
+const MC=[["#FF3D7F","#FF7A2E"],["#6E55FF","#3A9BFF"],["#10BFAE","#9BDB3C"],["#FF7A2E","#FFC93C"],["#3D95CE","#6E55FF"],["#00C244","#10BFAE"]];let mCol=0;
+$("mColors").innerHTML=MC.map((c,i)=>`<button type="button" data-c="${i}" aria-label="Color ${i+1}" style="width:46px;height:46px;border-radius:14px;border:0;background:linear-gradient(135deg,${c[0]},${c[1]});box-shadow:${i===0?"0 0 0 3px #fff,0 0 0 5px #1A1433":"none"}"></button>`).join("");
+$("mColors").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(!b)return;mCol=+b.dataset.c;$$("#mColors button").forEach((x,i)=>x.style.boxShadow=i===mCol?"0 0 0 3px #fff,0 0 0 5px #1A1433":"none");drawStub()});
+const claimURL=()=>location.origin+location.pathname+"#claim";
+function mMsg(){return `Hey ${$("mName").value||"there"}! I launched a coin called ${$("mCoin").value||"my coin"} ($${$("mSym").value||"COIN"}) on pump.fun and pointed its creator fees at you. Every trade sends you a cut, paid in dollars to your Venmo or Cash App. Claim it with your phone number, no crypto needed: ${claimURL()}\n— ${$("mFrom").value||"me"}`}
+function rr(x,X,Y,W,H,R){x.beginPath();x.moveTo(X+R,Y);x.arcTo(X+W,Y,X+W,Y+H,R);x.arcTo(X+W,Y+H,X,Y+H,R);x.arcTo(X,Y+H,X,Y,R);x.arcTo(X,Y,X+W,Y,R);x.closePath()}
+function drawStub(){const c=$("mCv"),x=c.getContext("2d"),W=1000,H=460,[c1,c2]=MC[mCol],sx=760;x.clearRect(0,0,W,H);
+  x.save();rr(x,0,0,W,H,36);x.clip();x.fillStyle="#FFFDF8";x.fillRect(0,0,W,H);
+  const g=x.createLinearGradient(0,0,sx,0);g.addColorStop(0,c1);g.addColorStop(1,c2);x.fillStyle=g;x.fillRect(0,0,sx,112);
+  x.strokeStyle="rgba(255,255,255,.16)";x.lineWidth=1.5;for(let r=10;r<900;r+=9){x.beginPath();x.arc(sx+40,56,r,Math.PI*.5,Math.PI*1.5);x.stroke()}
+  x.clearRect(sx,0,W-sx,112);x.fillStyle="#FFFDF8";x.fillRect(sx,0,W-sx,112);
+  const fg=x.createLinearGradient(0,0,sx,0);["#FFB3D1","#FFE3A1","#B9F3E9","#C9B8FF","#FFB3D1"].forEach((cc,i)=>fg.addColorStop(i/4,cc));x.fillStyle=fg;x.fillRect(0,112,sx,10);
+  x.strokeStyle="rgba(26,20,51,.04)";x.lineWidth=1;for(let i=-H;i<sx;i+=14){x.beginPath();x.moveTo(i,122);x.lineTo(i+H,H+200);x.stroke();x.beginPath();x.moveTo(i+H,122);x.lineTo(i,H+200);x.stroke()}
+  x.fillStyle=c1+"22";x.fillRect(sx,0,W-sx,H);x.restore();
+  x.globalCompositeOperation="destination-out";[[sx,0],[sx,H]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,22,0,7);x.fill()});x.globalCompositeOperation="source-over";
+  x.strokeStyle="rgba(26,20,51,.3)";x.lineWidth=3;x.setLineDash([10,9]);x.beginPath();x.moveTo(sx,30);x.lineTo(sx,H-30);x.stroke();x.setLineDash([]);
+  x.fillStyle="#fff";x.font="32px 'Bebas Neue', Impact, sans-serif";x.fillText("ADMIT ONE  ·  CREATOR FEES  ·  PAID IN USD",44,70);
+  x.fillStyle="#1A1433";x.font="120px 'Bebas Neue', Impact, sans-serif";x.fillText("$"+($("mSym").value||"COIN").slice(0,10).toUpperCase(),44,250);
+  x.fillStyle="#776E92";x.font="600 30px Outfit, sans-serif";x.fillText(($("mCoin").value||"My coin").slice(0,32),48,296);
+  x.strokeStyle="rgba(26,20,51,.18)";x.lineWidth=2.5;x.setLineDash([8,8]);x.beginPath();x.moveTo(44,330);x.lineTo(sx-40,330);x.stroke();x.setLineDash([]);
+  x.fillStyle="#776E92";x.font="24px 'Bebas Neue', Impact, sans-serif";x.fillText("FOR",48,370);x.fillText("FROM",300,370);
+  x.fillStyle="#1A1433";x.font="700 34px Outfit, sans-serif";x.fillText(($("mName").value||"You").slice(0,14),48,410);x.fillText(($("mFrom").value||"A friend").slice(0,14),300,410);
+  x.save();x.translate(624,392);x.rotate(-.2);x.strokeStyle=c1;x.lineWidth=5;rr(x,-82,-34,164,64,12);x.stroke();x.fillStyle=c1;x.font="44px 'Bebas Neue', Impact, sans-serif";x.textAlign="center";x.fillText("CLAIM ME",0,14);x.restore();
+  x.save();x.translate(sx+(W-sx)/2,H/2-30);x.rotate(-Math.PI/2);x.textAlign="center";x.fillStyle=c1;x.font="58px 'Bebas Neue', Impact, sans-serif";x.fillText("STUBS",0,-6);x.fillStyle="#776E92";x.font="22px 'Courier Prime', monospace";x.fillText("Nº "+String(hash($("mSym").value)%900000+100000),0,30);x.restore();
+  let r=hash($("mSym").value),bx=sx+34;x.fillStyle="#1A1433";while(bx<W-34){r=Math.imul(r,1103515245)+12345>>>0;const w=2+(r%4);if((r>>8)%3)x.fillRect(bx,H-74,w,44);bx+=w+2}}
+function mUpd(){if(!$("mMsg").dataset.edited)$("mMsg").value=mMsg();drawStub();$("mLink").textContent=claimURL()}
+["mCoin","mSym","mName","mFrom"].forEach(i=>$(i).addEventListener("input",mUpd));$("mMsg").addEventListener("input",()=>$("mMsg").dataset.edited=1);
+$("mCopy").onclick=()=>copy($("mMsg").value,"Message");
+$("mSave").onclick=()=>{try{const a=document.createElement("a");a.href=$("mCv").toDataURL("image/png");a.download="stub-"+($("mSym").value||"coin")+".png";document.body.appendChild(a);a.click();a.remove();boom()}catch(e){toast("Download is blocked here. Long-press or right-click the ticket to save it.")}};
+
+/* ---------- wallet ---------- */
+let wallet=null;const prov=()=>(window.phantom&&window.phantom.solana)||window.solflare||window.solana||null;
+async function connect(){const p=prov();if(!p){toast("No Solana wallet found. Install Phantom or Solflare.");return}try{const r=await p.connect();wallet=(r&&r.publicKey?r.publicKey:p.publicKey).toString();["walBtn","walBtn2"].forEach(i=>$(i).textContent=short(wallet));lUI();toast("Wallet connected")}catch(e){toast("Connection cancelled.")}}
+async function disconnect(){try{const p=prov();p&&p.disconnect&&await p.disconnect()}catch(e){}wallet=null;["walBtn","walBtn2"].forEach(i=>$(i).textContent="Connect wallet");lUI()}
+["walBtn","walBtn2"].forEach(i=>$(i).onclick=()=>wallet?disconnect():connect());
+
+/* ---------- router ---------- */
+const VIEWS=["home","explore","coin","launch","claim","payouts","analytics","maker","docs"];
+function route(){let v=(location.hash||"#home").slice(1);if(!VIEWS.includes(v))v="home";$$("[data-view]").forEach(s=>s.hidden=s.dataset.view!==v);$$("[data-nav]").forEach(a=>a.classList.toggle("on",a.dataset.nav===v));window.scrollTo(0,0);
+  if(v==="home"||v==="explore")renderCoins();if(v==="payouts")renderPayouts();if(v==="analytics")renderAnalytics();if(v==="launch")lUI();if(v==="claim")cUI();if(v==="maker")mUpd()}
+addEventListener("hashchange",route);
+$$("[data-j]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();$(a.dataset.j).scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"})}));
+const dr=store.get("draft",null);if(dr){$("lName").value=dr.name||"";$("lSym").value=dr.sym||"";$("lDesc").value=dr.desc||""}
+if(document.fonts)document.fonts.ready.then(()=>{drawStub()});
+route();
+</script>
+
+</html>
